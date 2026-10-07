@@ -1,0 +1,57 @@
+<?php
+/**
+ * Salin menjadi snap_bi.local.php lalu isi dari kredensial yang dikirim BNI
+ * (setelah lulus uji DEVSITE ASPI). Jangan commit file hasil salinan.
+ *
+ * Kunci privat: buat sendiri, kirim HANYA public key ke BNI/ASPI.
+ *   openssl genrsa -out egzy_private.pem 2048
+ *   openssl rsa -in egzy_private.pem -pubout -out egzy_public.pem
+ * Simpan di luar folder web, mis. /etc/egzy/snap/, izin 640 root:www-data.
+ */
+return [
+    'profiles' => [
+        'bapenda' => [
+            // --- Keluar: aplikasi -> BNI ---
+            'base_url'           => '[ISI: base URL sandbox/production SNAP BNI]',
+            'client_id'          => '[ISI: X-CLIENT-KEY dari BNI]',
+            'client_secret'      => '[ISI: client secret dari BNI]',
+            'partner_id'         => '[ISI: X-PARTNER-ID dari BNI]',
+            'channel_id'         => '[ISI: CHANNEL-ID, 5 digit, dari BNI]',
+            'private_key'        => '/etc/egzy/snap/egzy_private.pem',
+            'partner_service_id' => '[ISI: prefix/kode perusahaan VA, maks 8 digit]',
+            'customer_no_length' => 8,
+            'trx_prefix'         => 'PBJT',
+            'va_trx_type'        => 'C',   // C = closed amount; sesuaikan dengan dok teknis BNI
+            // 'paths'           => ['create' => '/snap/v1.0/transfer-va/create-va'], // bila prefiks BNI berbeda
+            // 'additional_info' => [],                                             // field tambahan BNI
+
+            // --- Masuk: BNI -> aplikasi (notifikasi bayar) ---
+            'inbound' => [
+                'client_key'    => '[ISI: X-CLIENT-KEY yang dipakai BNI saat memanggil kita]',
+                'public_key'    => '/etc/egzy/snap/bni_public.pem',
+                'client_secret' => '[ISI: secret bersama untuk signature simetris inbound]',
+                'partner_id'    => '', // opsional: wajibkan X-PARTNER-ID tertentu
+            ],
+        ],
+
+        // Satu profil PER HOTEL untuk pembayaran booking tamu; dana masuk ke rekening hotel itu.
+        // Nama profil = nama DB tenant hotel (lihat pbjt_control.tenants). Bila profil tidak ada,
+        // metode "Virtual Account BNI" otomatis disembunyikan di checkout hotel tersebut.
+        'tenant_wp001' => [
+            'base_url'           => '[ISI]',
+            'client_id'          => '[ISI: X-CLIENT-KEY milik hotel dari BNI]',
+            'client_secret'      => '[ISI]',
+            'partner_id'         => '[ISI]',
+            'channel_id'         => '[ISI]',
+            'private_key'        => '/etc/egzy/snap/tenant_wp001_private.pem',
+            'partner_service_id' => '[ISI: kode VA hotel]',
+            'customer_no_length' => 8,
+            'trx_prefix'         => 'BK',
+            'inbound' => [
+                'client_key'    => '[ISI: harus BERBEDA antar-profil]',
+                'public_key'    => '/etc/egzy/snap/bni_public.pem',
+                'client_secret' => '[ISI]',
+            ],
+        ],
+    ],
+];

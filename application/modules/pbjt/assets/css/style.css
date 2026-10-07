@@ -1,0 +1,86 @@
+/* Modul PBJT — gaya ter-scope (.pbjt-*) yang memakai token pro-theme.
+   Dimuat otomatis oleh template/includes/head.php untuk halaman admin. */
+
+.pbjt-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.pbjt-head .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--pt-primary, #0f766e); margin-bottom: 6px; }
+.pbjt-head .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pt-accent, #2dd4bf); box-shadow: 0 0 0 4px rgba(45, 212, 191, .18); }
+.pbjt-head h2 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; color: var(--pt-text, #0f172a); }
+.pbjt-head p { margin: 0; color: var(--pt-muted, #64748b); font-size: 13.5px; }
+.pbjt-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pbjt-actions .form-control { width: auto; min-width: 150px; font-weight: 600; }
+.pbjt-actions .btn { display: inline-flex; align-items: center; gap: 7px; }
+.pbjt-actions .btn svg { width: 16px; height: 16px; }
+.pbjt-role { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  background: var(--pt-primary-tint, #e7f5f2); color: var(--pt-primary, #0f766e); margin-left: 8px; vertical-align: 2px; }
+
+/* KPI */
+.pbjt-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
+@media (max-width: 1100px) { .pbjt-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 575px)  { .pbjt-kpis { grid-template-columns: 1fr; } }
+.pbjt-kpi { background: var(--pt-surface, #fff); border: 1px solid var(--pt-border, #e6e9ef); border-radius: var(--pt-radius, 14px);
+  box-shadow: var(--pt-shadow); padding: 18px; display: flex; gap: 14px; align-items: flex-start; transition: transform .15s, box-shadow .15s; }
+.pbjt-kpi:hover { transform: translateY(-2px); box-shadow: var(--pt-shadow-md); }
+.pbjt-kpi .pbjt-ic { width: 46px; height: 46px; flex: none; border-radius: 13px; display: grid; place-items: center; color: #fff; }
+.pbjt-kpi .pbjt-ic svg { width: 22px; height: 22px; }
+.pbjt-kpi .pbjt-ic.teal  { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+.pbjt-kpi .pbjt-ic.green { background: linear-gradient(135deg, #10b981, #059669); }
+.pbjt-kpi .pbjt-ic.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.pbjt-kpi .pbjt-ic.blue  { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.pbjt-kpi .lbl { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--pt-muted, #64748b); }
+.pbjt-kpi .val { font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin-top: 4px; color: var(--pt-text, #0f172a); }
+.pbjt-kpi .val small { font-size: 14px; font-weight: 600; color: var(--pt-muted, #64748b); }
+.pbjt-kpi .hint { font-size: 12px; color: var(--pt-muted, #64748b); margin-top: 3px; }
+
+/* Grid 2 kolom */
+.pbjt-grid2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+@media (max-width: 991px) { .pbjt-grid2 { grid-template-columns: 1fr; } }
+.pbjt-grid2 > .card { margin-bottom: 22px; }
+
+/* Bar per kecamatan */
+.pbjt-bar { display: grid; grid-template-columns: 120px 1fr 96px; align-items: center; gap: 12px; margin: 12px 0; font-size: 13px; }
+.pbjt-bar .nm { color: var(--pt-text-2, #334155); font-weight: 600; }
+.pbjt-bar .track { height: 10px; background: #eef2f6; border-radius: 999px; overflow: hidden; }
+.pbjt-bar .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #0f766e, #2dd4bf); }
+.pbjt-bar .amt { text-align: right; font-weight: 700; color: var(--pt-text, #0f172a); font-variant-numeric: tabular-nums; }
+
+/* Ringkasan */
+.pbjt-summary { font-size: 14px; line-height: 1.7; color: var(--pt-text-2, #334155); margin: 0; }
+.pbjt-summary strong { color: var(--pt-text, #0f172a); }
+.pbjt-stat-list { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
+.pbjt-stat-list li { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--pt-surface-2, #f8fafc); font-size: 13px; }
+.pbjt-stat-list li span { color: var(--pt-muted, #64748b); }
+.pbjt-stat-list li b { font-variant-numeric: tabular-nums; }
+
+/* Tabel temuan */
+.pbjt-table td .wp { font-weight: 700; color: var(--pt-text, #0f172a); }
+.pbjt-table td .wp-id { font-size: 11.5px; color: var(--pt-muted, #64748b); }
+.pbjt-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pbjt-table .rule { font-size: 12px; color: var(--pt-muted, #64748b); max-width: 240px; }
+.pbjt-risk { display: inline-flex; align-items: center; gap: 6px; }
+.pbjt-risk .d { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pbjt-empty { text-align: center; padding: 36px 16px !important; color: var(--pt-muted, #64748b); }
+.pbjt-empty svg { display: block; width: 36px; height: 36px; margin: 0 auto 10px; color: #cbd5e1; }
+
+/* Antrean MID */
+.pbjt-mid { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #fde68a;
+  background: #fffbeb; border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
+.pbjt-mid .code { font-weight: 700; color: #92400e; }
+.pbjt-mid .bank { color: #b45309; font-size: 12px; }
+.pbjt-mid .amt { font-weight: 700; color: #92400e; font-variant-numeric: tabular-nums; }
+
+/* Kelola tenant */
+.pbjt-form-note { font-size: 12.5px; color: var(--pt-muted, #64748b); margin: 10px 0 0; }
+.pbjt-count { display: inline-block; background: var(--pt-primary-tint, #e7f5f2); color: var(--pt-primary, #0f766e); border-radius: 999px;
+  padding: 1px 10px; font-size: 12px; font-weight: 700; margin-left: 6px; }
+.pbjt-dbname { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; background: #eef2f6; color: #334155; padding: 2px 8px; border-radius: 6px; }
+
+/* Tagihan VA */
+.pbjt-note { font-size: 12.5px; color: var(--pt-muted, #64748b); margin: 0 0 12px; line-height: 1.6; }
+.pbjt-row-actions { white-space: nowrap; text-align: right; }
+.pbjt-row-actions form { display: inline-block; margin: 0 0 0 4px; }
+.pbjt-bill { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+@media (max-width: 767px) { .pbjt-bill { grid-template-columns: 1fr 1fr; } }
+.pbjt-bill .lbl { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--pt-muted, #64748b); margin-bottom: 4px; }
+.pbjt-bill .big { font-size: 18px; font-weight: 800; color: var(--pt-text, #0f172a); font-variant-numeric: tabular-nums; word-break: break-all; }
+.pbjt-bill .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .03em; }
+.pbjt-late { color: #b91c1c; font-weight: 700; font-size: 12px; margin-top: 2px; }

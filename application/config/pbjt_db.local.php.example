@@ -1,0 +1,13 @@
+<?php
+/*
+ * Salin menjadi pbjt_db.local.php di server, isi kredensial sungguhan.
+ * Izin file yang disarankan:  chown root:www-data pbjt_db.local.php && chmod 640 pbjt_db.local.php
+ * JANGAN commit / bagikan file .local.php.
+ */
+return [
+    'host'       => 'localhost',  // cocok dgn user DB @'localhost'
+    'user'       => 'egzy_app',
+    'pass'       => 'GANTI_DENGAN_PASSWORD_KUAT',
+    'backup_dir' => '/var/backups/egzy',
+    // Nama DB biarkan default (hotelv3, pbjt_control) — beberapa modul mengasumsikannya.
+];
