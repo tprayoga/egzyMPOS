@@ -31,7 +31,7 @@
                     <div class="card">
                         <div class="card-body">
                             <?php echo form_open('report/index',array('class' => 'form-inline'))?>
-                            <?php date_default_timezone_set("Asia/Dhaka"); $today = date('Y-m-d'); 
+                            <?php $today = date('Y-m-d'); 
 		                        $statdate = date('Y-m-d', strtotime('first day of this month'));?>
                             <div class="form-group">
                                 <label class="" for="from_date"><?php echo display('start_date') ?></label>
@@ -79,7 +79,7 @@
                             <div class="text-center">
                                 <h3> <?php echo $setting->storename;?> </h3>
                                 <h4><?php echo $setting->address;?> </h4>
-                                <h4> <?php echo "Print Date" ?>: <?php echo date("d/m/Y h:i:s"); ?> </h4>
+                                <h4> <?php echo "Print Date" ?>: <?php echo date("d/m/Y H:i:s"); ?> </h4>
                             </div>
                             <div class="table-responsive" id="getresult2">
 

@@ -100,9 +100,11 @@ class Paymentmethod extends MX_Controller {
 		$data['intinfo']   = $this->payment_model->findById($id);
 	   }
 
-	   $data['module'] = "payment_setting";
-	   $data['page']   = "membershiplist";   
-	   echo Modules::run('template/layout', $data); 
+	   // Validasi gagal: dulu merender view "membershiplist" yang tidak ada (halaman rusak).
+	   if ($this->input->method() === 'post') {
+		$this->session->set_flashdata('exception', strip_tags(validation_errors()));
+	   }
+	   redirect("payment_setting/payment-method-list");
 	   }   
  
     }

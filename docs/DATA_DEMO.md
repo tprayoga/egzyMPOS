@@ -31,6 +31,11 @@ Bapenda membandingkan **omzet tercatat** (dari aplikasi EGZY atau tapping box) d
 
 - Normalnya QRIS **lebih kecil** dari omzet, karena sebagian tamu membayar tunai (rasio ±0,5–0,6).
 - Bila QRIS **lebih besar** dari omzet, pasti ada penjualan yang tidak tercatat → **temuan**. Potensi pajak dihitung dari estimasi omzet sebenarnya.
+- **PBJT (satu engine untuk kamar & restoran)**, tarif dari ketetapan Pemda (`application/config/pbjt.php`, 10%). DPP = subtotal − diskon + service charge. Harga termasuk pajak: PBJT = bruto − bruto / 1,1; belum termasuk: PBJT = DPP × 10%. Dibulatkan sekali per transaksi; dpp, pbjt, dan tarif disimpan per booking/order.
+  - Kamar: tarif = harga **per malam, termasuk PBJT** (default; per tipe kamar *Tarif termasuk PBJT*).
+  - Restoran: harga menu **belum termasuk PBJT** (default; per outlet `setting.resto_price_includes_tax`). POS menambahkan PBJT dari engine, bukan dari VAT produk/pengaturan.
+  - Tax Management hanya untuk komponen non-PBJT (mis. service charge); entri PBJT/PB1/pajak hotel/restoran ditolak.
+- **STPD**: Bapenda dapat menerbitkan STPD bunga keterlambatan dari tabel tagihan (mis. Hotel Cempaka). Parameter sanksi di tabel `pbjt_sanksi_config` (awal 1%/bulan, maks 24 bulan) **belum diverifikasi**, sehingga dokumen bertanda DRAFT.
 - Temuan **tidak otomatis ditagih**: perlu pemeriksaan dan penetapan (SKPDKB). Tagihan VA hanya untuk pajak yang dilaporkan.
 
 ## 10 wajib pajak dan ceritanya

@@ -74,11 +74,24 @@ class Qrmodule extends MX_Controller
 	public function roomqrcode(){
 		$data['title'] = display('module_list');
 		$data['roomlist']   = $this->qrmodule_model->roomlist();
+		// QR dibuat di server: layanan Google Chart (chart.apis.google.com) sudah dimatikan,
+		// sehingga gambar dulu tampil rusak.
+		foreach ($data['roomlist'] as $room) {
+			$room->qr = $this->_qr_data_uri($room->roomno);
+		}
         $data['module'] = "house_keeping";
         $data['page'] = "roomqr";
         echo Modules::run('template/layout', $data);
 		}
 
+	private function _qr_data_uri($text){
+		$this->load->library('ciqrcode', array('cacheable' => false));
+		$tmp = tempnam(sys_get_temp_dir(), 'qr');
+		$this->ciqrcode->generate(array('data' => (string) $text, 'level' => 'H', 'size' => 6, 'savename' => $tmp));
+		$png = (string) @file_get_contents($tmp);
+		@unlink($tmp);
+		return 'data:image/png;base64,' . base64_encode($png);
+	}
 
    
 

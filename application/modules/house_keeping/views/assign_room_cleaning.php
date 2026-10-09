@@ -30,6 +30,9 @@ $status = array(
                                         <span class="text-danger">*</span></label>
                                     <div class="col-sm-8 customesl pl-0">
                                         <?php echo form_dropdown('employee_id',$allhousekeeper,'', 'class="selectpicker form-control" data-live-search="true" id="employee_id" required') ?>
+                                        <?php if (count($allhousekeeper) <= 1) { ?>
+                                        <small class="text-danger d-block mt-1">Belum ada House Keeper yang bertugas saat ini. Pastikan pegawai berposisi House Keeper dan sudah dijadwalkan di Duty Roster (Roster assign).</small>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>

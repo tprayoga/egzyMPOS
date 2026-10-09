@@ -194,12 +194,12 @@ INSERT INTO `language` (`id`, `phrase`, `english`) VALUES
 (NULL, 'update_bank', 'Update Bank'),
 (NULL, 'bank_name', 'Bank Name');
 
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('Walk In Customer', 1);
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('Online Customer', 1);
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('Third Party', 0);
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('Take Way', 0);
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('QR Customer', 0);
-INSERT INTO `customer_type` (`customer_type`, `ordering`) VALUES('Hotel Customer', 1);
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'Walk In Customer', 1 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'Walk In Customer');
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'Online Customer', 1 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'Online Customer');
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'Third Party', 0 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'Third Party');
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'Take Away', 0 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'Take Away');
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'QR Customer', 0 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'QR Customer');
+INSERT INTO `customer_type` (`customer_type`, `ordering`) SELECT 'Hotel Customer', 1 FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `customer_type` WHERE `customer_type` = 'Hotel Customer');
 
 INSERT INTO `tbl_bank` (`bankid`, `bank_name`, `ac_name`, `ac_number`, `branch`, `signature_pic`) VALUES(2, 'City Bank', 'Kamal Hassan', '3869583', 'Uttara', './application/modules/hrm/assets/images/2020-01-18/e.jpg');
 INSERT INTO `tbl_card_terminal` (`card_terminalid`, `terminal_name`) VALUES(1, 'Nexus Terminal');

@@ -1051,6 +1051,9 @@ if ($fullname === '') { $fullname = (string) $this->session->userdata('email'); 
                     }
                 }
 
+            // Instance Bapenda (DB oversight) tidak mengoperasikan hotel/resto: menu operasional
+            // disembunyikan (aksesnya juga ditolak server oleh hook Egzy_oversight_guard).
+            if (egzy_is_oversight()) $HmvcMenu2 = null;
             if (isset($HmvcMenu2) && $HmvcMenu2 != null && sizeof($HmvcMenu2) > 0)
                 foreach ($HmvcMenu2 as $moduleName => $moduleData) {
                     // print_r($moduleName);

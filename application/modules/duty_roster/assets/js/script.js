@@ -80,7 +80,9 @@ function editinforoom(id){
 	// attendance_dashboard_view start
     $(document).ready(function() {
         $('.shiftdate').daterangepicker({
-            format: 'YYYY-MM-DD',
+            // Format tanggal seragam dengan laporan lain (Day Closing): DD/MM/YYYY.
+            // Dulu `format` di level atas diabaikan plugin -> tampil MM/DD/YYYY.
+            locale: { format: 'DD/MM/YYYY' },
             singleDatePicker: true,
             showDropdowns: true,
             minDate: 1901,
@@ -113,7 +115,7 @@ function editinforoom(id){
         "use strict";
         
         var cngedate= $('#changedrsdate').val();
-        var date    = new Date(cngedate),
+        var date    = moment(cngedate, 'DD/MM/YYYY').toDate(),
         yr          = date.getFullYear(),
         newmonth    = date.getMonth() + 1,
         month       = newmonth < 10 ? '0' + newmonth : newmonth,

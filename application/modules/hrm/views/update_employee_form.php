@@ -841,7 +841,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="ssn"><?php echo display('ssn')?></label>
-                                        <input type="text" class="form-control" id="ssn" name="ssn" placeholder="SSN"
+                                        <input type="text" class="form-control" id="ssn" name="ssn" inputmode="numeric" maxlength="16" placeholder="NIK"
                                             value="<?php echo html_escape($data->ssn);?>">
 
                                     </div>

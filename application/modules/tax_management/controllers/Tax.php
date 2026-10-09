@@ -38,6 +38,16 @@ class Tax extends MX_Controller {
 	  }else{
 		  $tax=1;
 	  }
+	  // PBJT/PB1 (pajak daerah) HANYA dihitung engine PBJT dengan tarif ketetapan Pemda. Tax Management
+	  // dibatasi untuk komponen non-PBJT (mis. service charge) agar pajak tidak terhitung ganda.
+	  require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+	  if ($this->input->method() === 'post' && Pbjt_pajak::adalahPajakDaerah($this->input->post('tax', TRUE))) {
+		$this->db->insert('accesslog', array('action_page' => 'Tax Management', 'action_done' => 'Ditolak',
+			'remarks' => 'Entri pajak daerah ditolak: ' . $this->input->post('tax', TRUE), 'user_name' => $this->session->userdata('fullname'),
+			'entry_date' => date('Y-m-d H:i:s')));
+		$this->session->set_flashdata('exception', 'PBJT/PB1 (pajak hotel/restoran) tidak diatur di sini: dihitung otomatis oleh sistem dengan tarif ketetapan Pemda. Tax Management hanya untuk komponen non-PBJT seperti service charge.');
+		redirect('tax_management/tax-list');
+	  }
 	  if ($this->form_validation->run()) { 
 	   if(empty($this->input->post('tax_id', TRUE))) {
 		 $data['tax_management']   = (Object) $postData = array(

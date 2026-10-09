@@ -1235,18 +1235,6 @@ foreach($scan as $file) {
                             </tr>
                             <?php } 
                                     $itemtotal=$subtotal;
-                    /*check $taxsetting info*/
-                        if(empty($taxinfos)){
-                        if($settinginfo->vat>0 ){
-                        $calvat=($itemtotal-$ptdiscount)*$settinginfo->vat/100;
-                        }
-                        else{
-                        $calvat=$pvat;
-                        }
-                        }
-                        else{
-                        $calvat=$pvat;
-                        }
                         $grtotal=$itemtotal;
                             $totalitem=$i;
                                     ?>
@@ -1272,7 +1260,16 @@ foreach($scan as $file) {
 							$servicetotal=0;
 							$servicecharge=0;
 							}
+						  // PBJT HANYA dari engine PBJT (tarif ketetapan Pemda); DPP = subtotal - diskon + service charge.
+						  require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+						  $pbjtTarif = Pbjt_pajak::tarif();
+						  $pbjtIncl = !empty($settinginfo->resto_price_includes_tax);
+						  $pbjtPos = Pbjt_pajak::hitung((!empty($itemtotal) ? $itemtotal : 0) - ($discount + $pdiscount), $servicetotal, $pbjtTarif, $pbjtIncl);
+						  if (empty($this->cart->contents())) { $pbjtPos['total'] = 0; $pbjtPos['pbjt'] = 0; }
+						  $calvat = $pbjtIncl ? 0 : $pbjtPos['pbjt'];
 						  ?>
+                                                        <input type="hidden" id="pbjt_tarif" value="<?php echo $pbjtTarif; ?>">
+                                                        <input type="hidden" id="pbjt_incl" value="<?php echo $pbjtIncl ? 1 : 0; ?>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1284,7 +1281,7 @@ foreach($scan as $file) {
                                                         <input name="sdtype" id="sdtype" type="hidden"
                                                             value="<?php if(!empty($settinginfo->service_chargeType)){echo $settinginfo->service_chargeType;} ?>" />
                                                         <input type="hidden" id="orginattotal"
-                                                            value="<?php echo $calvat+$itemtotal+$servicetotal-($discount+$pdiscount);?>"
+                                                            value="<?php echo $pbjtPos['total'];?>"
                                                             name="orginattotal">
                                                         <input type="hidden" id="invoice_discount"
                                                             class="form-control text-right" name="invoice_discount"
@@ -1294,7 +1291,7 @@ foreach($scan as $file) {
                                                                 <td>
                                                                     <div class="row m-0">
                                                                         <label for="date"
-                                                                            class="col-sm-8 mb-0"><?php echo display('vat_tax1');if(!empty($settinginfo->vat)){echo '('.$settinginfo->vat.'%)';}?>:
+                                                                            class="col-sm-8 mb-0">PBJT (<?php echo $pbjtTarif * 100; ?>%<?php echo $pbjtIncl ? ', termasuk harga' : ''; ?>):
                                                                         </label>
                                                                         <label class="col-sm-4 mb-0">
                                                                             <input type="hidden" id="vat" name="vat"
@@ -1315,16 +1312,16 @@ foreach($scan as $file) {
                                                                             class="mb-0 col-sm-6"><?php echo display('grand_total')?>:</label>
                                                                         <label class="col-sm-6 p-0 mb-0">
                                                                             <input type="hidden" id="orggrandTotal"
-                                                                                value="<?php echo $calvat+$itemtotal+$servicetotal-($discount+$pdiscount);?>"
+                                                                                value="<?php echo $pbjtPos['total'];?>"
                                                                                 name="orggrandTotal">
                                                                             <input name="grandtotal" type="hidden"
-                                                                                value="<?php echo $calvat+$itemtotal+$servicetotal-($discount+$pdiscount);?>"
+                                                                                value="<?php echo $pbjtPos['total'];?>"
                                                                                 id="grandtotal" />
                                                                             <span
                                                                                 class="badge badge-primary grandbg font-26"><strong>
                                                                                     <?php if($currency->position==1){echo $currency->curr_icon;}?>
                                                                                     <span
-                                                                                        id="caltotal"><?php echo $calvat+$itemtotal+$servicetotal-($discount+$pdiscount);?></span>
+                                                                                        id="caltotal"><?php echo $pbjtPos['total'];?></span>
                                                                                     <?php if($currency->position==2){echo $currency->curr_icon;}?>
                                                                                 </strong></span></label>
                                                                     </div>

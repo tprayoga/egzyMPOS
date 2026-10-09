@@ -100,6 +100,8 @@ class Room_details extends MX_Controller {
 		   'number_of_star'          => $this->input->post('number_of_star',TRUE),
 		   'roomdescription' 	     => $this->input->post('roomdescription',TRUE),
 		   'reservecondition'        => $this->input->post('reservecondition',TRUE),
+		   // Tarif sudah termasuk PBJT? (default ya). Menentukan cara hitung DPP/PBJT booking.
+		   'price_includes_tax'      => $this->input->post('price_includes_tax',TRUE) === '0' ? 0 : 1,
 		  );
 		$this->permission->method('room_setting','create')->redirect();
 		if ($this->roomdetails_model->create($postData)) { 
@@ -129,6 +131,8 @@ class Room_details extends MX_Controller {
 		   'number_of_star'         => $this->input->post('number_of_star',TRUE),
 		   'roomdescription' 	     => $this->input->post('roomdescription',TRUE),
 		   'reservecondition'        => $this->input->post('reservecondition',TRUE),
+		   // Tarif sudah termasuk PBJT? (default ya). Menentukan cara hitung DPP/PBJT booking.
+		   'price_includes_tax'      => $this->input->post('price_includes_tax',TRUE) === '0' ? 0 : 1,
 		  );
 	 
 		if ($this->roomdetails_model->update($postData)) { 

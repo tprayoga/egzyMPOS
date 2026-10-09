@@ -99,7 +99,7 @@ class Transport_model extends CI_Model {
 	{
         $this->db->select('*');
         $this->db->from('employee_history');
-        $this->db->where('pos_id',17);
+        $this->db->where_in('pos_id', position_ids(17));
         $query=$this->db->get();
         $data=$query->result();	
         return $data;
@@ -115,7 +115,7 @@ class Transport_model extends CI_Model {
 			->where('cast(concat(ra.emp_startroster_date, " ", ra.emp_startroster_time) as datetime) <= ',$today)
 			->where('cast(concat(ra.emp_endroster_date," ", ra.emp_endroster_time) as datetime) >=',$today)
 			->where('ra.is_complete',1)
-			->where('eh.pos_id',17)
+			->where_in('eh.pos_id', position_ids(17))
 			->get()
 			->result();
 			return $data;

@@ -122,7 +122,7 @@ $(document).ready(function () {
     var mm = utime.getMonth() + 1;
     var y = utime.getFullYear();
     var outtime = y+'-'+mm+'-'+dd+' '+tt;
-    var findate = $("#findate").val();
+    var findate = $("#findate").val() || undefined; // kosong = tanpa batas (belum ada tahun buku)
     $('.datefilter').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,

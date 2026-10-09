@@ -162,6 +162,13 @@ foreach ($tagihan as $r) if ((int)$r['pajak_terutang'] > 0 && $r['status'] !== '
                             <input type="hidden" name="masa" value="<?= pbjt_h($masa) ?>"><input type="hidden" name="tagihan_id" value="<?= (int)$r['tagihan_id'] ?>">
                             <button class="btn btn-light btn-sm">Cek status</button></form>
                     <?php endif; ?>
+                    <?php $sp = $r['tagihan_id'] && isset($stpd[(int)$r['tagihan_id']]) ? $stpd[(int)$r['tagihan_id']] : null; ?>
+                    <?php if ($r['tagihan_id'] && Pbjt_stpd::terlambat($r)): ?>
+                        <form method="post" action="<?= $base ?>/pbjt/terbit_stpd" onsubmit="return confirm('Terbitkan STPD bunga keterlambatan untuk <?= pbjt_h($r['wp_id']) ?>?')"><?= $csrf ?>
+                            <input type="hidden" name="masa" value="<?= pbjt_h($masa) ?>"><input type="hidden" name="tagihan_id" value="<?= (int)$r['tagihan_id'] ?>">
+                            <button class="btn btn-light btn-sm"><?= $sp ? 'Terbitkan ulang STPD' : 'Terbitkan STPD' ?></button></form>
+                    <?php endif; ?>
+                    <?php if ($sp): ?><a class="btn btn-light btn-sm" target="_blank" href="<?= $base ?>/pbjt/stpd/<?= (int)$sp['id'] ?>">Lihat STPD</a><?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -189,6 +196,10 @@ foreach ($tagihan as $r) if ((int)$r['pajak_terutang'] > 0 && $r['status'] !== '
         <form method="post" action="<?= $base ?>/pbjt/cek_va"><?= $csrf ?>
             <input type="hidden" name="masa" value="<?= pbjt_h($masa) ?>"><input type="hidden" name="tagihan_id" value="<?= (int)$r['tagihan_id'] ?>">
             <button class="btn btn-light btn-sm">Cek status pembayaran</button></form>
+        <?php endif; ?>
+        <?php if (isset($stpd[(int)$r['tagihan_id']])): $sp = $stpd[(int)$r['tagihan_id']]; ?>
+        <p class="pbjt-note pbjt-late">Bapenda menerbitkan STPD <?= pbjt_h($sp['nomor']) ?> atas keterlambatan pembayaran: <?= pbjt_rp($sp['total']) ?>.
+            <a target="_blank" href="<?= $base ?>/pbjt/stpd/<?= (int)$sp['id'] ?>">Lihat STPD</a></p>
         <?php endif; ?>
     <?php endif; ?>
     </div>

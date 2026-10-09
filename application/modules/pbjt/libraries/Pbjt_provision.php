@@ -103,6 +103,13 @@ class Pbjt_provision
         $this->db->query("UPDATE `$db`.setting SET storename='$namaEsc'");
         $this->db->query("UPDATE `$db`.common_setting SET storename='$namaEsc'");
 
+        // Tahun buku aktif = tahun kalender berjalan (tenant baru belum bertransaksi). Tanpanya form
+        // booking/POS menolak simpan dan datepicker "Invalid date"; isi template bisa tahun lalu.
+        $y = (int) date('Y');
+        $this->db->query("DELETE FROM `$db`.tbl_financialyear");
+        $this->db->query("INSERT INTO `$db`.tbl_financialyear (title,start_date,end_date,date_time,is_active,create_by)
+            VALUES ('$y','$y-01-01','$y-12-31','" . date('Y-m-d H:i:s') . "','2','1')");
+
         // Admin milik WP (super-admin di tenant-nya).
         $emailEsc = $this->esc($adminEmail);
         $passHash = $this->esc(egzy_password_hash($adminPass));

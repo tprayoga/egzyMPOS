@@ -94,7 +94,8 @@ $(document).ready(function () {
 'use strict';
 var date = new Date();
 date.setDate(date.getDate()-1);
-var findate = $("#findate").val();
+// Kosong bila belum ada tahun buku aktif; string kosong membuat datepicker "Invalid date".
+var findate = $("#findate").val() || null;
 $('.datepickers').bootstrapMaterialDatePicker({
 format: 'YYYY-MM-DD',
 startDate: new Date(),

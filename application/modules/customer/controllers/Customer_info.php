@@ -45,16 +45,16 @@ class Customer_info extends MX_Controller
 		$data['title'] = display('customer');
 		$this->form_validation->set_rules('firstname', display('firstname'), 'required|xss_clean');
 		$this->form_validation->set_rules('lastname', display('lastname'), 'required|xss_clean');
-		if (empty($this->input->post('customerid', TRUE))) {
-			$custphone = $this->db->select("cust_phone")->from("customerinfo")->where("cust_phone", $this->input->post('phone', TRUE))->get()->row();
-			if (!empty($custphone)) {
-				$this->session->set_flashdata('exception', 'Customer Phone number must be unique value');
-				redirect($_SERVER['HTTP_REFERER']);
+		// Keunikan HP hanya dicek bila HP diisi: saat form baru dibuka (GET) phone kosong,
+		// dan where(cust_phone, NULL) dulu cocok dengan customer lama tanpa HP -> form tak pernah tampil.
+		$phone = trim((string) $this->input->post('phone', TRUE));
+		if ($phone !== '') {
+			$this->db->select("cust_phone")->from("customerinfo")->where("cust_phone", $phone);
+			if (!empty($this->input->post('customerid', TRUE))) {
+				$this->db->where("customerid !=", $this->input->post('customerid', TRUE));
 			}
-		} else {
-			$custphone = $this->db->select("cust_phone")->from("customerinfo")->where("customerid !=", $this->input->post('customerid', TRUE))->where("cust_phone", $this->input->post('phone', TRUE))->get()->row();
-			if (!empty($custphone)) {
-				$this->session->set_flashdata('exception',  "Customer Phone number must be unique value");
+			if ($this->db->get()->row()) {
+				$this->session->set_flashdata('exception', 'Customer Phone number must be unique value');
 				redirect($_SERVER['HTTP_REFERER']);
 			}
 		}

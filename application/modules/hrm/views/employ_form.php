@@ -731,7 +731,7 @@
                                     <div class="form-group">
                                         <label for="ssn"><?php echo display('ssn')?></label>
                                         <div class="input__holder2">
-                                            <input type="text" class="form-control" id="ssn" name="ssn"
+                                            <input type="text" class="form-control" id="ssn" name="ssn" inputmode="numeric" maxlength="16"
                                                 placeholder="<?php echo display('ssn')?>">
                                             <span id="ssn-error" class="input__error">!</span>
                                         </div>

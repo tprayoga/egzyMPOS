@@ -490,6 +490,21 @@ function calculatetotal() {
 		
     var totalamount=parseFloat(subtotal)+parseFloat(vat);
     var sum = parseFloat(totalamount)+parseFloat(ser_chg) - parseFloat(inv_dis);
+	// PBJT dari engine PBJT (sama dengan Pbjt_pajak::hitung di server): DPP = subtotal - diskon + service.
+	var pbjtTarif = parseFloat($("#pbjt_tarif").val());
+	if (!isNaN(pbjtTarif)) {
+		var bruto = Math.round((parseFloat(subtotal) - parseFloat(inv_dis) + parseFloat(ser_chg)) * 100) / 100;
+		var pbjt;
+		if ($("#pbjt_incl").val() === '1') {
+			pbjt = Math.round(bruto - bruto / (1 + pbjtTarif));
+			vat = 0; sum = bruto;
+		} else {
+			pbjt = Math.round(bruto * pbjtTarif);
+			vat = pbjt; sum = bruto + pbjt;
+		}
+		$("#vat").val(vat);
+		$("#calvat").text(pbjt);
+	}
 	var sum=sum.toFixed(2);
     $("#grandtotal").val(sum);
 	$("#orginattotal").val(sum);

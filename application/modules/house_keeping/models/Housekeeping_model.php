@@ -118,7 +118,7 @@ class Housekeeping_model extends CI_Model {
 		->where('cast(concat(ra.emp_startroster_date, " ", ra.emp_startroster_time) as datetime) <= ',$day)
 		->where('cast(concat(ra.emp_endroster_date," ", ra.emp_endroster_time) as datetime) >=',$day)
 		->where('ra.is_complete',1)
-		->where('eh.pos_id',6)
+		->where_in('eh.pos_id', position_ids(6))
 		->get()
 		->result();
 	  
@@ -129,7 +129,7 @@ class Housekeeping_model extends CI_Model {
 	public function allhousekeeperemp(){
 	  $data = $this->db->select("emp_his_id,first_name,last_name,employee_id")
 		   ->from('employee_history')
-		   ->where('pos_id',6)
+		   ->where_in('pos_id', position_ids(6))
 		   ->get()
 		   ->result();
 		   return $data;
@@ -232,7 +232,7 @@ class Housekeeping_model extends CI_Model {
 	public function employee(){
 		$this->db->select('first_name,employee_id');
         $this->db->from("employee_history");
-        $this->db->where("pos_id",6);
+        $this->db->where_in('pos_id', position_ids(6));
         $this->db->order_by('employee_id', 'ASC');
         $query = $this->db->get();
 	    $emp = $query->result();
@@ -242,7 +242,7 @@ class Housekeeping_model extends CI_Model {
 		$betweenq="tbl_housekeepingrecord.date_start >='".$fromdate."' AND tbl_housekeepingrecord.date_end <='".$todate."'";
 		$this->db->select('employee_history.first_name,employee_history.employee_id');
         $this->db->from("employee_history");
-        $this->db->where("pos_id",6);
+        $this->db->where_in('pos_id', position_ids(6));
 		$this->db->group_by('employee_history.employee_id');
 		if($employee_id){
 			$this->db->where('employee_history.employee_id',$employee_id);
@@ -262,7 +262,7 @@ class Housekeeping_model extends CI_Model {
 	public function emplist(){
 		$this->db->select('first_name,employee_id');
         $this->db->from("employee_history");
-        $this->db->where("pos_id",6);
+        $this->db->where_in('pos_id', position_ids(6));
         $this->db->order_by('employee_id', 'ASC');
         $query = $this->db->get();
 	    $empwork = $query->result();
@@ -401,13 +401,13 @@ class Housekeeping_model extends CI_Model {
 				$list[$value->id] = $value->product_name;
 			return $list;
 		} else {
-			return false;
+			return array(); // dulu false: form_dropdown() di halaman Laundry tak bisa dirender
 		}
 	}
 	public function employeelist(){
 		$data = $this->db->select("first_name,employee_id")
 			->from("employee_history")
-			->where("pos_id",6)
+			->where_in('pos_id', position_ids(6))
 			->get()
 			->result();
 

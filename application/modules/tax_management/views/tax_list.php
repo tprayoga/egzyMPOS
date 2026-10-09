@@ -106,6 +106,7 @@
                              <?php echo display('add_new')?></button><?php endif; ?></small></h4>
              </div>
              <div class="card-body">
+                 <p class="text-muted">PBJT/PB1 (pajak hotel &amp; restoran) dihitung otomatis oleh sistem dengan tarif ketetapan Pemda dan tidak diatur di sini. Halaman ini hanya untuk komponen non-PBJT, misalnya service charge.</p>
                  <table width="100%" id="exdatatable" class="datatable table table-striped table-bordered table-hover">
                      <thead>
                          <tr>

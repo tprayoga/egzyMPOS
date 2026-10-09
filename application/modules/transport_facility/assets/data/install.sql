@@ -3,7 +3,7 @@ INSERT INTO `language` (`id`, `phrase`, `english`) VALUES
 (NULL, 'flight_details_list', 'Flight Details List'),
 (NULL, 'fl_details_add', 'Flight Details Add'),
 (NULL, 'flight_num', 'Flight Number'),
-(NULL, 'airlience_name', 'Airlience Name'),
+(NULL, 'airlience_name', 'Airline Name'),
 (NULL, 'departure', 'Departure'),
 (NULL, 'arrival', 'Arrival'),
 (NULL, 'fly_from', 'Fly From'),

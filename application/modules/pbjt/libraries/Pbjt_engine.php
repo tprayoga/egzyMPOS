@@ -22,7 +22,7 @@ class Pbjt_engine
         $this->db = $db;
         $this->cfg = array_merge([
             'porsi_nontunai_default' => 0.60,
-            'tarif_pbjt'             => 0.10,
+            'tarif_pbjt'             => null, // null = config Pemda (config/pbjt.php)
             'ambang_skor'            => 50,
             // WP yang "dijalankan" oleh instance aplikasi ini (single-tenant).
             'app_tenant'             => 'WP002',
@@ -30,6 +30,15 @@ class Pbjt_engine
             'oversight_db'           => 'hotelv3',
             'control_db'             => 'pbjt_control',
         ], $cfg);
+    }
+
+    private function tarif()
+    {
+        if ($this->cfg['tarif_pbjt'] === null) {
+            require_once __DIR__ . '/Pbjt_pajak.php';
+            $this->cfg['tarif_pbjt'] = Pbjt_pajak::tarif();
+        }
+        return (float) $this->cfg['tarif_pbjt'];
     }
 
     public function appTenant() { return $this->cfg['app_tenant']; }
@@ -220,7 +229,7 @@ class Pbjt_engine
      *
      * Aplikasi ini single-tenant, jadi seluruh transaksinya milik SATU WP
      * (WP yang "dijalankan" instance aplikasi ini). Omzet harian dihitung dari:
-     *   - booked_info.total_price  (pendapatan kamar)
+     *   - booked_info & customer_order: dpp + pbjt per transaksi (Pbjt_pajak; satu engine)
      *   - customer_order.totalamount (pendapatan restoran)
      * Hasilnya menggantikan baris omzet WP tersebut -> /pbjt jadi live & otomatis.
      * ------------------------------------------------------------------- */
@@ -234,7 +243,7 @@ class Pbjt_engine
         $masa = $this->db->real_escape_string($masa);
         $first = $masa . '-01';
         $last  = sprintf('%s-%02d', $masa, (int) date('t', strtotime($first)));
-        $tarif = (float) $this->cfg['tarif_pbjt'];
+        $tarif = $this->tarif();
 
         // Buang omzet bersumber aplikasi (device_id='APP') utk masa ini — semua WP.
         $this->db->query("DELETE FROM pbjt_omzet_harian WHERE device_id='APP' AND tanggal BETWEEN '$first' AND '$last'");
@@ -242,26 +251,34 @@ class Pbjt_engine
         $st = $this->db->prepare("INSERT INTO pbjt_omzet_harian (wp_id, device_id, tanggal, omzet_bruto, pajak_terlapor) VALUES (?, 'APP', ?, ?, ?)");
         $totalOmzet = 0; $nBaris = 0;
 
+        require_once __DIR__ . '/Pbjt_pajak.php';
         foreach ($this->tenants() as $t) {
             $wp = $t['wp_id'];
             $db = $this->db->real_escape_string($t['db_name']);
-            $harian = []; // tgl => omzet, khusus tenant ini
+            // dpp/pbjt per transaksi (satu engine untuk kamar & restoran). Oversight tidak mengubah
+            // nominal bill tenant; koreksi bill belum-bayar dilakukan hook di aplikasi tenant.
+            Pbjt_pajak::sinkronKamar($this->db, $t['db_name'], $tarif);
+            Pbjt_pajak::sinkronResto($this->db, $t['db_name'], $tarif, false);
+            $harian = []; // tgl => [omzet, pajak], khusus tenant ini
             $add = function ($sql) use (&$harian) {
                 if ($r = $this->db->query($sql)) {
                     while ($row = $r->fetch_assoc()) {
                         $tgl = $row['d']; if (!$tgl) continue;
-                        $harian[$tgl] = ($harian[$tgl] ?? 0) + (int) round((float) $row['v']);
+                        if (!isset($harian[$tgl])) $harian[$tgl] = [0, 0];
+                        $harian[$tgl][0] += (int) round((float) $row['v']);
+                        $harian[$tgl][1] += (int) round((float) $row['p']);
                     }
                 }
             };
             // Transaksi batal (booking status 1, order status 5) bukan omzet.
-            $add("SELECT DATE(date_time) d, SUM(total_price) v FROM `$db`.booked_info
+            // Omzet = dpp + pbjt (uang yang dibayar tamu, pembanding QRIS); pajak = pbjt per transaksi.
+            $add("SELECT DATE(date_time) d, SUM(dpp + pbjt) v, SUM(pbjt) p FROM `$db`.booked_info
                   WHERE DATE(date_time) BETWEEN '$first' AND '$last' AND bookingstatus <> 1 GROUP BY DATE(date_time)");
-            $add("SELECT order_date d, SUM(totalamount) v FROM `$db`.customer_order
+            $add("SELECT order_date d, SUM(dpp + pbjt) v, SUM(pbjt) p FROM `$db`.customer_order
                   WHERE order_date BETWEEN '$first' AND '$last' AND order_status <> 5 GROUP BY order_date");
 
-            foreach ($harian as $tgl => $omzet) {
-                $pajak = (int) round($omzet * $tarif);
+            foreach ($harian as $tgl => $x) {
+                list($omzet, $pajak) = $x;
                 $st->bind_param('ssii', $wp, $tgl, $omzet, $pajak);
                 $st->execute();
                 $totalOmzet += $omzet; $nBaris++;
@@ -282,7 +299,7 @@ class Pbjt_engine
         $lastDay  = sprintf('%s-%02d', $masa, (int) date('t', strtotime($firstDay)));
         $now = date('Y-m-d H:i:s');
         $p = (float) $this->cfg['porsi_nontunai_default'];
-        $tarif = (float) $this->cfg['tarif_pbjt'];
+        $tarif = $this->tarif();
         $ambang = (int) $this->cfg['ambang_skor'];
 
         $this->db->query("DELETE FROM pbjt_temuan WHERE masa='$masa'");

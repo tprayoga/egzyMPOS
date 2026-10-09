@@ -148,18 +148,6 @@ if ($cart = $this->cart->contents()){?>
         </tr>
         <?php } 
 									$itemtotal=$subtotal;
-										/*check $taxsetting info*/
-														  if(empty($taxinfos)){
-														  if($settinginfo->vat>0 ){
-															$calvat=($itemtotal-$pdiscount)*$settinginfo->vat/100;
-														  }
-														  else{
-															$calvat=$pvat;
-															}
-														  }
-														  else{
-															$calvat=$pvat;
-														  }
 									$grtotal=$itemtotal;
 									?>
 
@@ -179,6 +167,13 @@ else{
 	$servicecharge=0;
 	}
 
+// PBJT HANYA dari engine PBJT (tarif ketetapan Pemda): bukan dari VAT produk, setting.vat, atau
+// modul pajak. DPP = subtotal - diskon + service charge.
+require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+$pbjtIncl = !empty($settinginfo->resto_price_includes_tax);
+$pbjtCart = Pbjt_pajak::hitung((!empty($subtotal) ? $subtotal : 0) - $pdiscount, $servicetotal, Pbjt_pajak::tarif(), $pbjtIncl);
+$calvat = $pbjtIncl ? 0 : $pbjtCart['pbjt'];
+$multiplletax = array();
 $multiplletaxvalue=htmlentities(serialize($multiplletax));
 ?>
 <input name="subtotal" id="subtotal" type="hidden" value="<?php if(!empty($subtotal)){echo $subtotal;}?>" />
@@ -188,4 +183,4 @@ $multiplletaxvalue=htmlentities(serialize($multiplletax));
 <input name="sc" type="hidden" value="<?php echo $servicecharge;?>" id="sc" />
 <input name="tdiscount" type="hidden" value="<?php if(!empty($pdiscount)){echo $pdiscount;}else{$pdiscount = 0; }?>"
     placeholder="0.00" id="tdiscount" />
-<input name="tgtotal" type="hidden" value="<?php echo $calvat+$servicetotal+$itemtotal-$pdiscount;?>" id="tgtotal" />
+<input name="tgtotal" type="hidden" value="<?php echo !empty($this->cart->contents()) ? $pbjtCart['total'] : 0;?>" id="tgtotal" />

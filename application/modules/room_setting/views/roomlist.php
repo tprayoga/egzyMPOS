@@ -62,6 +62,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                    <label for="price_includes_tax" class="col-sm-4 col-form-label">Tarif termasuk PBJT</label>
+                    <div class="col-sm-8">
+                        <select name="price_includes_tax" id="price_includes_tax" class="form-control">
+                            <option value="1" selected>Ya, tarif sudah termasuk PBJT</option>
+                            <option value="0">Tidak, PBJT ditambahkan di atas tarif</option>
+                        </select>
+                    </div>
+                </div>
+                                    <div class="form-group row">
                                         <label for="defaultrate"
                                             class="col-sm-4 col-form-label"><?php echo display('defaultrate') ?> <span
                                                 class="text-danger">*</span></label>

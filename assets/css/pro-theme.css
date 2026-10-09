@@ -587,6 +587,10 @@ hr { border-color: var(--pt-border); }
   color: var(--pt-primary) !important; border-bottom-color: var(--pt-primary) !important; background: transparent !important;
 }
 
+/* Tab POS (New/On Going/Online/Today Order) tetap berlatar warna dari modul ordermanage:
+   teks abu tema tak terbaca di atasnya -> hitam (Skenario Uji, Perbaikan desain no. 1). */
+.nav-tabs > li > a.newtab:not(.active), .nav-tabs > li > a.newtab:not(.active):hover { color: #111 !important; }
+
 /* ---------- Fieldset & legend ---------- */
 fieldset { border: 1px solid var(--pt-border) !important; border-radius: 12px !important; padding: 6px 18px 16px !important; margin: 12px 0 18px !important; }
 legend {

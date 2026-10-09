@@ -218,7 +218,7 @@
                             <td><?php echo $sl; ?></td>
                             <td><?php echo $table->tablename; ?></td>
                             <td><?php echo $table->person_capicity; ?></td>
-                            <td><img src="<?php echo base_url(!empty($table->table_icon)?$table->table_icon:'assets/img/icons/table/default.jpg'); ?>"
+                            <td><img src="<?php echo base_url(!empty($table->table_icon)?$table->table_icon:'assets/img/icons/resttable/table1.png'); ?>"
                                     class="img-thumbnail tablelist-img" /></td>
                             <td class="center">
                                 <?php if($this->permission->method('ordermanage','update')->access()): ?>

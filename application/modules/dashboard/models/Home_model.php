@@ -442,5 +442,52 @@ class Home_model extends CI_Model {
 			return 0;
 		}
 
+
+	/**
+	 * Jenis usaha instance ini (hotel/resto) dari registry tenant di DB kontrol.
+	 * NULL bila DB aktif bukan DB tenant (mis. oversight Bapenda).
+	 */
+	public function jenis_usaha()
+	{
+		$ctrl = $this->load->database('control', TRUE);
+		$row = $ctrl->select('jenis_usaha')->where('db_name', $this->db->database)->get('tenants')->row();
+		return $row ? $row->jenis_usaha : null;
+	}
+
+	/** Ringkasan dashboard restoran. Status order: 1 pending, 2 proses, 3 siap, 4 selesai, 5 batal. */
+	public function resto_summary()
+	{
+		$today = date('Y-m-d');
+		$month = date('Y-m');
+		$one = function ($sql, $bind = array()) {
+			return $this->db->query($sql, $bind)->row();
+		};
+		return (object) array(
+			'all'       => $one("SELECT COUNT(*) n, COALESCE(SUM(totalamount),0) v FROM customer_order WHERE order_status = 4"),
+			'running'   => $one("SELECT COUNT(*) n, COALESCE(SUM(totalamount),0) v FROM customer_order WHERE order_status IN (1,2,3)"),
+			'cancel'    => $one("SELECT COUNT(*) n FROM customer_order WHERE order_status = 5"),
+			'today'     => $one("SELECT COUNT(*) n, COALESCE(SUM(CASE WHEN order_status = 4 THEN totalamount END),0) v FROM customer_order WHERE order_date = ? AND order_status <> 5", array($today)),
+			// Sama dengan dasar omzet engine PBJT: semua order yang tidak batal.
+			// dpp/pbjt per transaksi dari engine PBJT (sama dengan menu Pengawasan PBJT).
+			// (sebelum migrasi 010 kolom dpp/pbjt belum ada: tampilkan omzet, PBJT 0)
+			'month'     => $this->db->field_exists('pbjt', 'customer_order')
+				? $one("SELECT COUNT(*) n, COALESCE(SUM(dpp),0) v, COALESCE(SUM(pbjt),0) p FROM customer_order WHERE DATE_FORMAT(order_date,'%Y-%m') = ? AND order_status <> 5", array($month))
+				: $one("SELECT COUNT(*) n, COALESCE(SUM(totalamount),0) v, 0 p FROM customer_order WHERE DATE_FORMAT(order_date,'%Y-%m') = ? AND order_status <> 5", array($month)),
+		);
+	}
+
+	public function resto_monthly($months = 6)
+	{
+		$from = date('Y-m-01', strtotime('-' . ((int) $months - 1) . ' month'));
+		return $this->db->query("SELECT DATE_FORMAT(order_date,'%Y-%m') ym, COUNT(*) n, COALESCE(SUM(totalamount),0) v
+			FROM customer_order WHERE order_status = 4 AND order_date >= ? GROUP BY ym ORDER BY ym", array($from))->result();
+	}
+
+	public function resto_latest($limit = 10)
+	{
+		return $this->db->query("SELECT o.saleinvoice, o.order_date, o.order_time, o.totalamount, o.order_status, t.tablename
+			FROM customer_order o LEFT JOIN rest_table t ON t.tableid = o.table_no
+			ORDER BY o.order_id DESC LIMIT " . (int) $limit)->result();
+	}
 }
  

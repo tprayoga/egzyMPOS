@@ -23,6 +23,9 @@
                                                  class="text-danger">*</span></label>
                                          <div class="col-sm-8">
                                              <?php echo form_dropdown('product_id',$productdropdown,'','id="product_id" class="form-control" required') ?>
+                                        <?php if (count(array_filter(array_keys((array) $productdropdown), 'strlen')) === 0) { ?>
+                                        <small class="text-danger d-block mt-1">Belum ada produk laundry. Tambahkan di Unit and Products &gt; Products list dengan kategori "Housekeeping products" dan Laundry item = Yes.</small>
+                                        <?php } ?>
                                          </div>
                                      </div>
                                      <div class="form-group row">

@@ -18,8 +18,8 @@
                 <div class="form-group row">
                     <label for="faviconPreview" class="col-md-4 col-form-label"></label>
                     <div class="col-md-8">
-                        <img src="<?php echo base_url($soundsetting->nofitysound) ?>" alt="Notify Sound"
-                            class="img-thumbnail" />
+                        <!-- File notifikasi berupa audio (mp3): dulu ditampilkan dengan <img> -> ikon rusak. -->
+                        <audio controls preload="none" src="<?php echo html_escape(base_url($soundsetting->nofitysound)) ?>"></audio>
                     </div>
                 </div>
                 <?php } ?>

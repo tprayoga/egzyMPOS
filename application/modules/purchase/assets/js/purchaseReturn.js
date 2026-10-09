@@ -40,7 +40,7 @@ function showinvoice(){
         data: {csrf_test_name: csrf, invoice: invoice},
         success: function(data) {
             $('#itemlist').html(data);
-            var findate = $("#findate").val();
+            var findate = $("#findate").val() || null; // kosong = tanpa batas (belum ada tahun buku)
               $('.datepickers').bootstrapMaterialDatePicker({
                 format: 'YYYY-MM-DD',
                 startDate: new Date(),

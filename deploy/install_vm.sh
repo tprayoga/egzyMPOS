@@ -194,6 +194,12 @@ chmod 640 "$LOCAL_CFG"
 chmod 750 "$APP_DIR/pbjt_backup_cron.sh" "$APP_DIR/deploy/"*.sh
 chown -R www-data:www-data "$APP_DIR/application/cache" "$APP_DIR/application/logs" \
   "$APP_DIR/assets/img" "$APP_DIR/assets/data" "$BACKUP_DIR"
+# Folder upload gambar modul (foto menu restoran + thumbnail, foto pegawai). Dulu milik root ->
+# upload gagal diam-diam dan gambar menu tak pernah tampil (Skenario Uji TC-025).
+UPLOAD_DIRS="$APP_DIR/application/modules/ordermanage/assets/images $APP_DIR/application/modules/hrm/assets/images"
+for d in $UPLOAD_DIRS; do mkdir -p "$d"; done
+mkdir -p "$APP_DIR/application/modules/ordermanage/assets/images/"{big,medium,small}
+chown -R www-data:www-data $UPLOAD_DIRS
 chmod 750 "$BACKUP_DIR"
 ok "Hanya cache, log, upload gambar, data aplikasi & folder backup yang bisa ditulis web server"
 
@@ -249,6 +255,13 @@ cat > /etc/apache2/sites-available/egzy.conf <<APACHE
     <DirectoryMatch "^$APP_DIR/application/modules/[^/]+/assets/">
         Require all granted
     </DirectoryMatch>
+    # Folder upload yang bisa ditulis web server: sajikan sebagai berkas, jangan pernah dieksekusi.
+    <DirectoryMatch "^$APP_DIR/(application/modules/[^/]+/assets/images|assets/img)/">
+        php_admin_flag engine off
+        <FilesMatch "\.(php[0-9]?|phtml|phar)\$">
+            Require all denied
+        </FilesMatch>
+    </DirectoryMatch>
     # Skrip CLI, patcher, dan file tersembunyi
     <FilesMatch "^((pbjt|snap)_.*\.(php|sh)|seed_demo\.php|server_router\.php|update_module\.php|composer\.(json|lock)|error_log|\..*)\$">
         Require all denied
@@ -275,12 +288,24 @@ step "8/10 HTTPS"
 SCHEME="http"
 if [ "$DO_HTTPS" -eq 1 ] && [ -n "$EMAIL" ]; then
   apt-get install -y -qq certbot python3-certbot-apache >/dev/null
-  if certbot --apache -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect; then
+  # Vhost HTTPS dibuat certbot SEKALI dari salinan egzy.conf; saat update, aturan baru tak ikut.
+  # Sisihkan agar certbot membuatnya ulang dari egzy.conf terbaru (sertifikat lama dipakai ulang).
+  LE_SSL=/etc/apache2/sites-available/egzy-le-ssl.conf
+  if [ -f "$LE_SSL" ]; then
+    a2dissite -q egzy-le-ssl >/dev/null 2>&1 || true
+    mv "$LE_SSL" "$LE_SSL.bak"
+  fi
+  if certbot --apache -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect --keep-until-expiring; then
+    rm -f "$LE_SSL.bak"
     SCHEME="https"
     sed -i -E "s/(\\\$config\['cookie_secure'\][[:space:]]*=[[:space:]]*)FALSE/\1TRUE/; s/(\\\$config\['cookie_httponly'\][[:space:]]*=[[:space:]]*)FALSE/\1TRUE/" \
       "$APP_DIR/application/config/config.php"
     ok "Sertifikat terpasang; cookie sesi disetel Secure + HttpOnly"
   else
+    if [ -f "$LE_SSL.bak" ]; then   # kembalikan vhost HTTPS lama agar situs tetap jalan
+      mv "$LE_SSL.bak" "$LE_SSL"; a2ensite -q egzy-le-ssl >/dev/null; apache_apply
+      warn "certbot gagal; vhost HTTPS lama dikembalikan (aturan Apache terbaru belum berlaku di HTTPS)."
+    fi
     warn "certbot gagal (DNS $DOMAIN sudah mengarah ke VM ini? port 80 terbuka?). Aplikasi tetap jalan via HTTP; ulangi skrip setelah DNS siap."
   fi
 else
@@ -336,6 +361,9 @@ chk module 404
 chk application/config/snap_bi.local.php 403 404
 chk snap_setup.php 403 404
 chk seed_demo.php 403 404
+for d in $UPLOAD_DIRS "$APP_DIR/application/modules/ordermanage/assets/images/small"; do
+  if as_www test -w "$d"; then ok "$(printf '%-48s %s' "${d#$APP_DIR/}" 'bisa ditulis www-data')"; else echo "   ${C_R}✘${C_0} ${d#$APP_DIR/} tidak bisa ditulis www-data"; fail=$((fail+1)); fi
+done
 if ( cd "$APP_DIR" && as_www "$PHP_BIN" pbjt_test_isolation.php | tail -1 | grep -q "ISOLASI TENANT OK" ); then ok "Uji isolasi tenant: OK"; else echo "   ${C_R}✘${C_0} Uji isolasi tenant gagal"; fail=$((fail+1)); fi
 
 CRED=/root/egzy-credentials.txt

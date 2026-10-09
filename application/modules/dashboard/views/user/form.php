@@ -45,7 +45,7 @@
                     <label for="email" class="col-sm-3 col-form-label"><?php echo display('email') ?> <span
                             class="text-danger">*</span></label>
                     <div class="col-sm-9">
-                        <input name="email" class="form-control" type="text"
+                        <input name="email" class="form-control" type="text" autocomplete="off"
                             placeholder="<?php echo display('email') ?>" id="email"
                             value="<?php echo html_escape($user->email) ?>" required>
                     </div>
@@ -54,7 +54,7 @@
                     <label for="password" class="col-sm-3 col-form-label"><?php echo display('password') ?> <span
                             class="text-danger">*</span></label>
                     <div class="col-sm-9">
-                        <input name="password" class="form-control" type="password"
+                        <input name="password" class="form-control" type="password" autocomplete="new-password"
                             placeholder="<?php echo display('password') ?>" id="password" required>
                     </div>
                 </div>

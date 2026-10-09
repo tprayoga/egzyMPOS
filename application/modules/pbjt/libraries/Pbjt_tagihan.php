@@ -20,7 +20,7 @@ class Pbjt_tagihan
         $this->db = $oversight;
         $this->cfg = array_merge([
             // Tanggal jatuh tempo pada bulan setelah masa. SESUAIKAN dengan Perda/Perkada.
-            'tanggal_jatuh_tempo' => 15,
+            'tanggal_jatuh_tempo' => 10,
             // Bila diterbitkan setelah jatuh tempo, VA tetap aktif selama N hari.
             'masa_aktif_va_terlambat' => 7,
         ], $cfg);
@@ -51,7 +51,7 @@ class Pbjt_tagihan
             dibuat_pada DATETIME NOT NULL,
             diubah_pada DATETIME NOT NULL,
             UNIQUE KEY uq_wp_masa (wp_id, masa)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
         if (!$ok) throw new RuntimeException('Migrasi pbjt_tagihan gagal: ' . $db->error);
     }
 

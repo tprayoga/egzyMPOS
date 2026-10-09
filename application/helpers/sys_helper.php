@@ -114,4 +114,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         return !empty($row->end_date)?$row->end_date:'';
     }  
 
+
+    /**
+     * ID posisi bawaan (mis. 6 = House Keeper, 9 = Waiter, 17 = Driver) PLUS posisi lain yang
+     * namanya sama bila spasi/huruf besar diabaikan. Modul lama meng-hardcode pos_id, sehingga
+     * pegawai pada posisi buatan pengguna ("Housekeeper") tak pernah muncul di daftar.
+     */
+    if (!function_exists('position_ids')) {
+        function position_ids($pos_id){
+            static $cache = array();
+            $ci =& get_instance();
+            $key = $ci->db->database . ':' . (int) $pos_id;
+            if (isset($cache[$key])) return $cache[$key];
+            $ids = array((int) $pos_id);
+            // query() mentah: helper ini dipanggil DI TENGAH rantai query builder pemanggil.
+            $rows = $ci->db->query("SELECT p.pos_id FROM position p JOIN position b ON b.pos_id = ?
+                WHERE LOWER(REPLACE(p.position_name, ' ', '')) = LOWER(REPLACE(b.position_name, ' ', ''))", array((int) $pos_id))->result();
+            foreach ($rows as $r) $ids[] = (int) $r->pos_id;
+            return $cache[$key] = array_values(array_unique($ids));
+        }
+    }
+
+
+    /** TRUE bila request ini berjalan di DB oversight (instance Bapenda), bukan DB tenant WP. */
+    if (!function_exists('egzy_is_oversight')) {
+        function egzy_is_oversight(){
+            static $cfg = null;
+            if ($cfg === null) $cfg = require APPPATH . 'config/pbjt_db.php';
+            $ci =& get_instance();
+            return isset($ci->db) && is_object($ci->db) && $ci->db->database === $cfg['oversight_db'];
+        }
+    }
+
 ?>

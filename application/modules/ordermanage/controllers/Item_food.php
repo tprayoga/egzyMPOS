@@ -130,6 +130,10 @@ class Item_food extends MX_Controller {
 		if ( ! $this->upload->do_upload('picture'))
 		{
 				$error = array('error' => $this->upload->display_errors());
+				// Dulu gagal diam-diam (mis. folder upload tak bisa ditulis server) -> gambar tak pernah tampil.
+				if (!empty($_FILES['picture']['name'])) {
+					$this->session->set_flashdata('exception', 'Gambar gagal diunggah: ' . strip_tags($this->upload->display_errors()));
+				}
 				$img='';
 				$big='';
 				$medium='';
@@ -138,11 +142,10 @@ class Item_food extends MX_Controller {
 		else
 		{		
 				 if(!empty($id)) {
-					 $imageinfo=$this->db->select('*')->from('tem_foods')->where('ProductsID',$id)->get()->row();
-					 unlink($imageinfo->ProductImage);
-					 unlink($imageinfo->bigthumb);
-					 unlink($imageinfo->medium_thumb);
-					 unlink($imageinfo->small_thumb);
+					 $imageinfo=$this->db->select('*')->from('item_foods')->where('ProductsID',$id)->get()->row();
+					 foreach (array('ProductImage','bigthumb','medium_thumb','small_thumb') as $f) {
+						 if ($imageinfo && !empty($imageinfo->$f) && is_file($imageinfo->$f)) @unlink($imageinfo->$f);
+					 }
 					 }
 				
 				$fdata =$this->upload->data();
@@ -895,6 +898,10 @@ class Item_food extends MX_Controller {
 		if(!$this->upload->do_upload('picture'))
 		{
 				$error = array('error' => $this->upload->display_errors());
+				// Dulu gagal diam-diam (mis. folder upload tak bisa ditulis server) -> gambar tak pernah tampil.
+				if (!empty($_FILES['picture']['name'])) {
+					$this->session->set_flashdata('exception', 'Gambar gagal diunggah: ' . strip_tags($this->upload->display_errors()));
+				}
 				$img='';
 				$big='';
 				$medium='';
@@ -903,11 +910,10 @@ class Item_food extends MX_Controller {
 		else
 		{	
 				 if(!empty($id)) {
-					 $imageinfo=$this->db->select('*')->from('tem_foods')->where('ProductsID',$id)->get()->row();
-					 unlink($imageinfo->ProductImage);
-					 unlink($imageinfo->bigthumb);
-					 unlink($imageinfo->medium_thumb);
-					 unlink($imageinfo->small_thumb);
+					 $imageinfo=$this->db->select('*')->from('item_foods')->where('ProductsID',$id)->get()->row();
+					 foreach (array('ProductImage','bigthumb','medium_thumb','small_thumb') as $f) {
+						 if ($imageinfo && !empty($imageinfo->$f) && is_file($imageinfo->$f)) @unlink($imageinfo->$f);
+					 }
 					 }
 				
 				$fdata =$this->upload->data();

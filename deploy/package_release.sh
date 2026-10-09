@@ -37,6 +37,7 @@ rsync -a \
   --exclude 'application/cache/temp/*' --exclude 'application/logs/log-*' \
   --exclude 'application/config/pbjt_db.local.php' --exclude 'application/config/snap_bi.local.php' \
   --exclude '*.pem' --exclude '/tests/' \
+  --exclude '/*.xlsx' --exclude '/*.xls' --exclude '/*.csv' --exclude '/*.docx' --exclude '/*.pdf' \
   --exclude '_snap_*' --exclude '_preview_*' --exclude '_frame*' \
   --exclude 'assets/data/backup/*.sql' --exclude 'assets/data/outgoing/*.sql' \
   --exclude 'error_log' \

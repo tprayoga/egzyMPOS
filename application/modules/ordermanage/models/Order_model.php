@@ -819,7 +819,7 @@ public function customer_dropdown2()
 			->where('cast(concat(ra.emp_startroster_date, " ", ra.emp_startroster_time) as datetime) <= ',$today)
 			->where('cast(concat(ra.emp_endroster_date," ", ra.emp_endroster_time) as datetime) >=',$today)
 			->where('ra.is_complete',1)
-			->where('eh.pos_id',9)
+			->where_in('eh.pos_id', position_ids(9))
 			->get()
 			->result();
 			return $data;
@@ -827,7 +827,7 @@ public function customer_dropdown2()
  public function waiterwithshift(){
  	$data = $this->db->select("emp_his_id,first_name,last_name")
 			->from('employee_history')
-			->where('pos_id',9)
+			->where_in('pos_id', position_ids(9))
 			->get()
 			->result();
 			return $data;

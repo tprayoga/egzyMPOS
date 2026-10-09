@@ -31,38 +31,36 @@ class Room_reservation extends MX_Controller
 			9 => 'paid_amount',
 		);
 
-		$where = $sqlTot = $sqlRec = "";
-		// check search value exist
-		if (!empty($params['search']['value'])) {
-			$where .= " WHERE ";
-			$where .= " ( booked_info.booking_number LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.full_guest_name LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.room_no LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR customerinfo.firstname LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR customerinfo.cust_phone LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.checkindate LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.checkoutdate LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.bookingstatus LIKE '0' )";
-		} else {
-			$where = " WHERE (booked_info.bookingstatus=0 )";
+		// Filter status (Booking list): default Pending; "all" = semua status, termasuk booking yang
+		// sudah check-out/batal (dulu tak ada tempat melihat riwayat booking). Nilai lain ditolak.
+		$statusFilter = isset($params['status']) ? (string) $params['status'] : '0';
+		$conds = array();
+		if ($statusFilter !== 'all') {
+			$conds[] = "booked_info.bookingstatus=" . (in_array($statusFilter, array('0', '1', '2', '3', '4', '5'), true) ? (int) $statusFilter : 0);
 		}
+		// Pencarian: dulu nilai disisipkan mentah ke SQL (SQL injection) -> di-escape.
+		if (!empty($params['search']['value'])) {
+			$q = $this->db->escape_like_str($params['search']['value']);
+			$like = array();
+			foreach (array('booked_info.booking_number', 'booked_info.full_guest_name', 'booked_info.room_no', 'customerinfo.firstname', 'customerinfo.cust_phone', 'booked_info.checkindate', 'booked_info.checkoutdate') as $col) {
+				$like[] = "$col LIKE '$q%' ESCAPE '!'";
+			}
+			$conds[] = "(" . implode(" OR ", $like) . ")";
+		}
+		$where = $conds ? " WHERE " . implode(" AND ", $conds) : "";
 		// getting total number records without any search
 		$sql = "SELECT booked_info.*,customerinfo.firstname,customerinfo.cust_phone FROM booked_info Left join customerinfo ON customerinfo.customerid=booked_info.cutomerid";
 
-
-		$sqlTot .= $sql;
-		$sqlRec .= $sql;
-		//concatenate search sql if value exist
-		if (isset($where) && ($where != '')) {
-			$sqlTot .= $where;
-			$sqlRec .= $where;
-		}
+		$sqlTot = $sql . $where;
+		$sqlRec = $sql . $where;
 		$SQLtotal = $this->db->query($sqlTot);
 		$totalRecords = $SQLtotal->num_rows();
 		if ($params['length'] == '-1') {
 			$params['length'] = intval($totalRecords);
 		}
-		$sqlRec .=  " ORDER BY " . $columns[$params['order'][0]['column']] . "   " . $params['order'][0]['dir'] . " LIMIT " . $params['start'] . " ," . $params['length'] . " ";
+		$orderCol = isset($params['order'][0]['column'], $columns[(int) $params['order'][0]['column']]) ? $columns[(int) $params['order'][0]['column']] : $columns[0];
+		$orderDir = (isset($params['order'][0]['dir']) && strtolower($params['order'][0]['dir']) === 'asc') ? 'ASC' : 'DESC';
+		$sqlRec .=  " ORDER BY " . $orderCol . " " . $orderDir . " LIMIT " . max(0, (int) $params['start']) . " ," . max(0, (int) $params['length']) . " ";
 
 		$SQLoffer = $this->db->query($sqlRec);
 		$queryRecords = $SQLoffer->result();
@@ -154,7 +152,8 @@ class Room_reservation extends MX_Controller
 			$row[] = $due < 0 ? 0 : number_format($due, 2);
 			$row[] = $status;
 			$row[] = $paymentStatus;
-			$row[] = $update . $checkin . $view . $print . $cancel;
+			// Ubah/check-in/batal hanya relevan untuk booking Pending.
+			$row[] = $value->bookingstatus == 0 ? $update . $checkin . $view . $print . $cancel : $view . $print;
 			$data[] = $row;
 		}
 
@@ -184,36 +183,28 @@ class Room_reservation extends MX_Controller
 			9 => 'paid_amount',
 		);
 
-		$where = $sqlTot = $sqlRec = "";
-		// check search value exist
+		// Dulu: input pencarian disisipkan mentah (SQL injection) dan menghasilkan "WHERE ... WHERE"
+		// serta merujuk roomdetails yang tak di-join -> pencarian selalu error.
+		$where = " WHERE booked_info.bookingstatus=4";
 		if (!empty($params['search']['value'])) {
-			$where .= " WHERE ";
-			$where .= " ( booked_info.booking_number LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR roomdetails.roomtype LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.room_no LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR customerinfo.firstname LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR customerinfo.cust_phone LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.checkindate LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.checkoutdate LIKE '" . $params['search']['value'] . "%' ";
-			$where .= " OR booked_info.bookingstatus LIKE '" . $params['search']['value'] . "%' )";
+			$q = $this->db->escape_like_str($params['search']['value']);
+			$like = array();
+			foreach (array('booked_info.booking_number', 'booked_info.room_no', 'customerinfo.firstname', 'customerinfo.cust_phone', 'booked_info.checkindate', 'booked_info.checkoutdate') as $col) {
+				$like[] = "$col LIKE '$q%' ESCAPE '!'";
+			}
+			$where .= " AND (" . implode(" OR ", $like) . ")";
 		}
-		// getting total number records without any search
-		$sql = "SELECT booked_info.*,customerinfo.firstname,customerinfo.cust_phone FROM booked_info Left join customerinfo ON customerinfo.customerid=booked_info.cutomerid where booked_info.bookingstatus=4";
-
-
-		$sqlTot .= $sql;
-		$sqlRec .= $sql;
-		//concatenate search sql if value exist
-		if (isset($where) && ($where != '')) {
-			$sqlTot .= $where;
-			$sqlRec .= $where;
-		}
+		$sql = "SELECT booked_info.*,customerinfo.firstname,customerinfo.cust_phone FROM booked_info Left join customerinfo ON customerinfo.customerid=booked_info.cutomerid";
+		$sqlTot = $sql . $where;
+		$sqlRec = $sql . $where;
 		$SQLtotal = $this->db->query($sqlTot);
 		$totalRecords = $SQLtotal->num_rows();
 		if ($params['length'] == '-1') {
 			$params['length'] = intval($totalRecords);
 		}
-		$sqlRec .=  " ORDER BY " . $columns[$params['order'][0]['column']] . "   " . $params['order'][0]['dir'] . " LIMIT " . $params['start'] . " ," . $params['length'] . " ";
+		$orderCol = isset($params['order'][0]['column'], $columns[(int) $params['order'][0]['column']]) ? $columns[(int) $params['order'][0]['column']] : $columns[0];
+		$orderDir = (isset($params['order'][0]['dir']) && strtolower($params['order'][0]['dir']) === 'asc') ? 'ASC' : 'DESC';
+		$sqlRec .=  " ORDER BY " . $orderCol . " " . $orderDir . " LIMIT " . max(0, (int) $params['start']) . " ," . max(0, (int) $params['length']) . " ";
 
 		$SQLoffer = $this->db->query($sqlRec);
 		$queryRecords = $SQLoffer->result();

@@ -2122,7 +2122,7 @@ INSERT INTO `language` (`id`, `phrase`, `english`, `malay`, `french`, `german`, 
 (1068, 'view_checkin', 'View Check In', NULL, NULL, NULL, NULL, NULL, NULL),
 (1069, 'payment_details', 'Payment Details', NULL, NULL, NULL, NULL, NULL, NULL),
 (1070, 'time_format', 'Time Format', NULL, NULL, NULL, NULL, NULL, NULL),
-(1071, 'booking_source', 'Booking Soruce', NULL, NULL, NULL, NULL, NULL, NULL),
+(1071, 'booking_source', 'Booking Source', NULL, NULL, NULL, NULL, NULL, NULL),
 (1072, 'booking_source_no', 'Source No', NULL, NULL, NULL, NULL, NULL, NULL),
 (1073, 'arrival_from', 'Arival From', NULL, NULL, NULL, NULL, NULL, NULL),
 (1074, 'purpose_of_visit', 'Purpose of Visit', NULL, NULL, NULL, NULL, NULL, NULL),
@@ -2421,7 +2421,7 @@ INSERT INTO `language` (`id`, `phrase`, `english`, `malay`, `french`, `german`, 
 (1845, 'solved', 'Solved', NULL, NULL, NULL, NULL, NULL, NULL),
 (1846, 'is_use_website', 'Is Use website', NULL, NULL, NULL, NULL, NULL, NULL),
 (1847, 'visible_home', 'Is Home Page', NULL, NULL, NULL, NULL, NULL, NULL),
-(1848, 'factory_rest', 'Factory rest', NULL, NULL, NULL, NULL, NULL, NULL);
+(1848, 'factory_rest', 'Factory reset', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `language` (`id`, `phrase`, `english`, `malay`, `french`, `german`, `spanish`, `turkish`, `hindi`) VALUES (1849, 'vat_tax', 'VAT/TAX', 'VAT/TAX', 'VAT/TAX', 'VAT/TAX', 'VAT/TAX', 'VAT/TAX', 'VAT/TAX');
 
 -- --------------------------------------------------------

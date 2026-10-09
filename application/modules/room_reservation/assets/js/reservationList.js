@@ -2,13 +2,13 @@ $( document ).ready(function() {
     'use strict';
     var base = $('#base_url').val();
     var csrf = $('#csrf_token').val();
-    $("#bookingdetails").DataTable({
+    var bookingTable = $("#bookingdetails").DataTable({
         "processing": true,
              "serverSide": true,
              "ajax":{
                 url : base+"/room_reservation/room_reservation/bookingdatatable", // json datasource
                 type: "post",
-                data: {'csrf_test_name': csrf},  // type of method  ,GET/POST/DELETE
+                data: function (d) { d.csrf_test_name = csrf; d.status = $('#statusfilter').val() || '0'; },
                 error: function(){
                   $("#employee_grid_processing").css("display","none");
                   $('[data-toggle="tooltip"]').tooltip(); 
@@ -56,7 +56,8 @@ $( document ).ready(function() {
               className:"btn-sm prints"
       }
   ]
-}),
+});
+        $('#statusfilter').on('change', function () { bookingTable.ajax.reload(); });
         $('.dataTables_filter').addClass('search');  
         $('.dataTables_filter label').addClass('search__inner');  
         $('.dataTables_filter input').addClass('search__text');	

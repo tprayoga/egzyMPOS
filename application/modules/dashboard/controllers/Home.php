@@ -30,6 +30,11 @@ class Home extends MX_Controller {
 		}
 	public function index()
 	{   
+		// Tenant restoran (jenis_usaha di registry tenant) tidak punya kamar/booking:
+		// dulu tetap melihat dashboard hotel yang kosong.
+		if ($this->home_model->jenis_usaha() === 'resto') {
+			return $this->_resto_dashboard();
+		}
 		$data['title']    = "Home";
 		$ordernum= $this->home_model->countorder();
 		$orderchekin= $this->home_model->countcheckin();
@@ -97,6 +102,18 @@ class Home extends MX_Controller {
 		$data['module'] = "dashboard";  
 		$data['page']   = "home/home";  
 		echo Modules::run('template/layout', $data); 
+	}
+	private function _resto_dashboard()
+	{
+		$data['title']   = "Dashboard Restoran";
+		$data['sum']     = $this->home_model->resto_summary();
+		$data['monthly'] = $this->home_model->resto_monthly(6);
+		$data['latest']  = $this->home_model->resto_latest(10);
+		require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+		$data['tarif_pbjt'] = Pbjt_pajak::tarif(); // config Pemda
+		$data['module'] = "dashboard";
+		$data['page']   = "home/home_resto";
+		echo Modules::run('template/layout', $data);
 	}
 	public function checkmonth(){
 		$monyhyear=$this->input->post('monthyear',TRUE);

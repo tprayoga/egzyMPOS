@@ -12,6 +12,16 @@
                 <!--  table area -->
                 <div class="col-sm-12">
                     <div class="card-body">
+                        <div class="form-inline mb-3">
+                            <label for="statusfilter" class="mr-2 font-weight-bold">Status booking</label>
+                            <select id="statusfilter" class="form-control form-control-sm">
+                                <option value="0" selected>Pending</option>
+                                <option value="4">Check In</option>
+                                <option value="5">Checkout</option>
+                                <option value="1">Batal</option>
+                                <option value="all">Semua</option>
+                            </select>
+                        </div>
                         <div class="table-responsive">
                             <table width="100%" class="datatable table table-striped table-bordered table-hover"
                                 id="bookingdetails">

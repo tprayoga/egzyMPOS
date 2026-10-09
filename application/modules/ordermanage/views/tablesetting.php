@@ -21,9 +21,11 @@
                 	<div class="text-center boxpad draggable" id="<?php echo $table->tableid;?>" <?php echo $style;?> data-itemid='<?php echo $table->tableid;?>'>
                     <input name="sortid[]" type="hidden" value="<?php echo $table->tableid;?>" />
                     <div>
-                    <img src="<?php echo base_url(!empty($table->table_icon)?$table->table_icon:'assets/img/icons/table/default.jpg'); ?>" class="img-thumbnail"/></div>
+                    <img src="<?php echo base_url(!empty($table->table_icon)?$table->table_icon:'assets/img/icons/resttable/table1.png'); ?>" class="img-thumbnail"/></div>
                     </div>
-                    <?php } }?>
+                    <?php } } else { ?>
+                    <p class="text-muted px-3 mb-0">Belum ada meja. Tambahkan meja lebih dulu di Manage table &gt; Table list.</p>
+                    <?php } ?>
                     
                </div>
                

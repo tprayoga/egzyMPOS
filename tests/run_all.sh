@@ -17,5 +17,8 @@ run tests/snapbi/pbjt_tagihan_test.php
 run tests/snapbi/booking_va_test.php
 run tests/security_regression_test.php
 run tests/auth_regression_test.php
+run tests/skenario_uji_test.php
+run tests/pbjt_kamar_stpd_test.php
+run tests/pbjt_resto_taxmgt_test.php
 run pbjt_test_isolation.php
 exit $fail

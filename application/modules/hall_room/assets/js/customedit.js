@@ -106,7 +106,7 @@ $(document).ready(function () {
     "use strict";
     var nowDate = new Date();
     var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
-    var findate = $("#findate").val();
+    var findate = $("#findate").val() || undefined; // kosong = tanpa batas (belum ada tahun buku)
     $('.datefilter').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,

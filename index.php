@@ -56,6 +56,11 @@
  */
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 
+// Zona waktu default WIB. Tanpa ini PHP memakai UTC (php.ini umumnya kosong), sehingga tanggal/jam
+// transaksi yang ditulis server mundur 7 jam. Zona per tenant (setting.timezone) diterapkan oleh
+// hook Egzy_timezone setelah koneksi DB tersedia.
+date_default_timezone_set('Asia/Jakarta');
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

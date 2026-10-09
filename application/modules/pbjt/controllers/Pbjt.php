@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once APPPATH . 'modules/pbjt/libraries/Pbjt_engine.php';
 require_once APPPATH . 'modules/pbjt/libraries/Pbjt_tagihan.php';
+require_once APPPATH . 'modules/pbjt/libraries/Pbjt_stpd.php';
 require_once APPPATH . 'modules/snapbi/libraries/Snap_service.php';
 
 /**
@@ -14,6 +15,7 @@ require_once APPPATH . 'modules/snapbi/libraries/Snap_service.php';
  *   tidak pernah dianggap Bapenda. Data dibaca dari DB oversight.
  *
  * URL: /pbjt  /pbjt/reconcile  /pbjt/daftar  /pbjt/simpan  /pbjt/terbit_va  /pbjt/cek_va
+ *      /pbjt/terbit_stpd  /pbjt/stpd/{id}
  */
 class Pbjt extends MX_Controller
 {
@@ -47,7 +49,7 @@ class Pbjt extends MX_Controller
 
         $this->engine = new Pbjt_engine($this->ov, [
             'porsi_nontunai_default' => 0.60,
-            'tarif_pbjt'             => 0.10,
+            // tarif PBJT: dari config Pemda (config/pbjt.php), bukan di-hardcode di sini
             'ambang_skor'            => 50,
         ]);
     }
@@ -122,7 +124,8 @@ class Pbjt extends MX_Controller
             'temuan'   => $this->engine->temuan($ctx, $masa),
             'perKec'   => $this->engine->perKecamatan($ctx, $masa),
             'unmapped' => $this->engine->unmapped($ctx, $masa),
-            'tagihan'  => $this->engine->tagihan($ctx, $masa),
+            'tagihan'  => $tagihan = $this->engine->tagihan($ctx, $masa),
+            'stpd'     => (new Pbjt_stpd($this->ov))->terakhirPerTagihan(array_column($tagihan, 'tagihan_id')),
             'masaSelesai' => Pbjt_tagihan::masaSelesai($masa),
         ]);
     }
@@ -207,6 +210,55 @@ class Pbjt extends MX_Controller
             $this->session->set_flashdata('exception', 'Cek status gagal: ' . $e->getMessage());
         }
         redirect('pbjt?masa=' . urlencode($masa));
+    }
+
+    /* ------------------------------------------------------------------
+     * STPD — bunga keterlambatan (parameter sanksi di pbjt_sanksi_config)
+     * ---------------------------------------------------------------- */
+
+    /** POST: terbitkan STPD untuk tagihan yang terlambat (Bapenda). */
+    public function terbit_stpd()
+    {
+        $ctx = $this->ctx();
+        if ($ctx['role'] !== 'bapenda') {
+            return $this->info('Khusus Bapenda', 'Penerbitan STPD hanya dapat dilakukan Bapenda.');
+        }
+        $masa = (string) $this->input->post('masa', TRUE);
+        $id = (int) $this->input->post('tagihan_id', TRUE);
+        if ($this->input->method() !== 'post' || !$this->engine->tagihanDalamScope($ctx, $id)) {
+            redirect('pbjt?masa=' . urlencode($masa));
+        }
+        try {
+            $sid = (new Pbjt_stpd($this->ov))->terbitkan($id, $this->aktor($ctx));
+            $this->audit($ctx, 'terbit-stpd', "tagihan #$id -> STPD #$sid");
+            redirect('pbjt/stpd/' . $sid);
+        } catch (Throwable $e) {
+            $this->session->set_flashdata('exception', 'STPD gagal diterbitkan: ' . $e->getMessage());
+            redirect('pbjt?masa=' . urlencode($masa));
+        }
+    }
+
+    /** GET: dokumen STPD siap cetak (Bapenda, atau WP pemilik). */
+    public function stpd($id = 0)
+    {
+        $ctx = $this->ctx();
+        $s = (new Pbjt_stpd($this->ov))->get((int) $id);
+        if (!$s || ($ctx['role'] !== 'bapenda' && !($ctx['role'] === 'wp' && $ctx['wp_id'] === $s['wp_id']))) {
+            return $this->info('Akses ditolak', 'STPD tidak ditemukan atau bukan milik Anda.');
+        }
+        $this->audit($ctx, 'lihat-stpd', "STPD #{$s['id']} {$s['wp_id']} masa {$s['masa']}");
+        $this->load->view('pbjt/stpd_dokumen', ['s' => $s, 'cfg' => json_decode($s['config_snapshot'], true), 'alamat' => $this->_alamatWp($s['wp_id'])]);
+    }
+
+    /** Alamat & telepon WP dari DB tenant-nya (bila WP memakai aplikasi). */
+    private function _alamatWp($wp)
+    {
+        $ctrl = $this->load->database('control', TRUE);
+        $t = $ctrl->select('db_name')->where('wp_id', $wp)->get('tenants')->row();
+        if (!$t) return null;
+        $db = str_replace('`', '', $t->db_name);
+        $r = $this->ov->query("SELECT address, phone FROM `$db`.setting LIMIT 1");
+        return $r ? $r->fetch_assoc() : null;
     }
 
     public function reconcile()

@@ -76,12 +76,11 @@ if ($cart = $this->cart->contents()){?>
                                      </tr>
                                     <?php } 
 									$itemtotal=$totalamount+$subtotal;
-									if($settinginfo->vat>0){
-										$calvat=$itemtotal*$settinginfo->vat/100;
-									}
-									else{
-										$calvat=$pvat;
-										}
+									// PBJT HANYA dari engine PBJT (tarif ketetapan Pemda), bukan VAT produk/setting.
+									require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+									$pbjtIncl = !empty($settinginfo->resto_price_includes_tax);
+									$pbjtCart = Pbjt_pajak::hitung($itemtotal - $discount, 0, Pbjt_pajak::tarif(), $pbjtIncl);
+									$calvat = $pbjtIncl ? 0 : $pbjtCart['pbjt'];
 									?>
                                     <tr>
                                     	<td class="text-right" colspan="4"><strong><?php echo display('sub_total') ?></strong></td>
@@ -98,4 +97,4 @@ if ($cart = $this->cart->contents()){?>
                                         <input name="subtotal" id="subtotal" type="hidden" value="<?php echo $itemtotal;?>" />
 							            <input name="tvat" type="hidden" value="<?php echo $calvat;?>" id="tvat" />
                                          <input name="tdiscount" type="hidden" value="<?php if($discount>0){echo $discount;}?>" placeholder="0.00" id="tdiscount" />
-                                        <input name="tgtotal" type="hidden" value="<?php echo $calvat+$itemtotal-$discount;?>" id="tgtotal" />
+                                        <input name="tgtotal" type="hidden" value="<?php echo isset($pbjtCart) ? $pbjtCart['total'] : 0;?>" id="tgtotal" />

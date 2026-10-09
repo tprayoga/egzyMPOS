@@ -29,6 +29,7 @@ $APP = __DIR__ . '/application/';
 $C = require $APP . 'config/pbjt_db.php';
 require $APP . 'helpers/egzy_auth_helper.php';
 require $APP . 'modules/pbjt/libraries/Pbjt_engine.php';
+require $APP . 'modules/pbjt/libraries/Pbjt_pajak.php';
 require $APP . 'modules/pbjt/libraries/Pbjt_tagihan.php';
 require $APP . 'modules/pbjt/libraries/Pbjt_backup.php';
 require $APP . 'modules/snapbi/libraries/Snap_store.php';
@@ -275,7 +276,7 @@ function seed_booking(mysqli $t, $wpKey, array $w, array $rooms, array $tamu, $t
             $bn = sprintf('%08d', $no);
             $bid = ins($t, 'booked_info', ['booking_number' => $bn, 'date_time' => "$dibuat " . sprintf('%02d:%02d:00', rnd(8, 21), rnd(0, 59)),
                 'roomid' => $room['id'], 'nuofpeople' => min(2, $room['cap']), 'children' => mt_rand(0, 3) === 0 ? 1 : 0, 'total_room' => 1,
-                'room_no' => $nomor, 'roomrate' => $room['rate'], 'total_price' => $total, 'paid_amount' => $paid, 'offer_discount' => 0,
+                'room_no' => $nomor, 'roomrate' => $room['rate'], 'total_price' => $room['rate'] /* app: harga per malam */, 'paid_amount' => $paid, 'offer_discount' => 0,
                 'full_guest_name' => $g['nama'], 'checkindate' => "$d 14:00:00", 'checkoutdate' => "$checkout 12:00:00",
                 'cutomerid' => $g['id'], 'bookingstatus' => $status, 'isSeen' => 1,
                 'coments' => $status === 1 ? 'Dibatalkan tamu' : ($viaVa ? 'Booking website, dibayar via VA BNI' : 'Booking dari admin')]);
@@ -330,6 +331,10 @@ function seed_resto(mysqli $t, array $range, $today, array &$omzet)
                 $total += $it['harga'] * $qty;
             }
             $status = $d < $today ? (mt_rand(1, 100) <= 3 ? 5 : 4) : pick([1, 2, 4]);
+            // Engine PBJT yang sama dengan POS: harga menu belum termasuk PBJT (default restoran).
+            $subtotal = $total;
+            $pj = Pbjt_pajak::hitung($subtotal, 0, Pbjt_pajak::tarif(), false);
+            $total = (int) round($pj['total']);
             $oid = ins($t, 'customer_order', ['saleinvoice' => sprintf('%06d', $n), 'customer_id' => $walkin, 'cutomertype' => 1,
                 'order_date' => $d, 'order_time' => sprintf('%02d:%02d:00', rnd(10, 21), rnd(0, 59)), 'table_no' => rnd(1, 10),
                 'totalamount' => $total, 'customerpaid' => $status === 4 ? $total : 0, 'order_status' => $status, 'tokenno' => $n]);
@@ -337,9 +342,9 @@ function seed_resto(mysqli $t, array $range, $today, array &$omzet)
                 ins($t, 'order_menu', ['order_id' => $oid, 'menu_id' => $b[0]['pid'], 'price' => $b[0]['harga'], 'menuqty' => $b[1],
                     'add_on_id' => '', 'addonsqty' => '', 'varientid' => $b[0]['vid'], 'food_status' => $status === 4 ? 1 : 0]);
             }
-            if ($status === 4) {
-                ins($t, 'bill', ['customer_id' => $walkin, 'order_id' => $oid, 'total_amount' => $total, 'discount' => 0, 'service_charge' => 0,
-                    'VAT' => 0, 'bill_amount' => $total, 'bill_date' => $d, 'bill_time' => '20:00:00', 'bill_status' => 1,
+            if ($status !== 5) { // POS membuat bill saat order; lunas bila selesai
+                ins($t, 'bill', ['customer_id' => $walkin, 'order_id' => $oid, 'total_amount' => $subtotal, 'discount' => 0, 'service_charge' => 0,
+                    'VAT' => $pj['pbjt'], 'bill_amount' => $total, 'bill_date' => $d, 'bill_time' => '20:00:00', 'bill_status' => $status === 4 ? 1 : 0,
                     'payment_method_id' => pick([4, 4, 6, 1]), 'create_by' => 1, 'create_date' => $d, 'update_by' => 1, 'update_date' => $d]);
             }
             if ($status !== 5) $omzet[$d] = ($omzet[$d] ?? 0) + $total;
@@ -464,7 +469,7 @@ echo "   Rekonsiliasi: $nTemuan temuan di " . implode(', ', $engine->liveMasaLis
 // ====================================================================== 4. TAGIHAN + VA
 echo "\n4. Tagihan PBJT & VA\n";
 $store = new Snap_store($ctl);
-$tag = new Pbjt_tagihan($ov, ['tanggal_jatuh_tempo' => 15]);
+$tag = new Pbjt_tagihan($ov, ['tanggal_jatuh_tempo' => 10]);
 $ringkas = [];
 foreach ($WP as $key => $w) {
     foreach ($w['tagihan'] as $masa => $nasib) {
@@ -476,7 +481,7 @@ foreach ($WP as $key => $w) {
         $vaExp = $nasib === 'menunggu' ? max("$jt 23:59:59", date('Y-m-d 23:59:59', strtotime("$TODAY +7 days"))) : "$jt 23:59:59";
         $va = $store->insertVa(['profile' => 'bapenda', 'purpose' => 'pbjt', 'tenant_db' => null, 'ref' => 'TMP', 'partner_service_id' => '   98829',
             'va_name' => 'PBJT ' . $w['nama'], 'amount' => $pajak, 'currency' => 'IDR', 'expired_at' => $vaExp, 'trx_prefix' => 'PBJT'], 8);
-        $lunas = $nasib === 'lunas' ? date('Y-m-d H:i:s', strtotime(substr($jt, 0, 7) . '-' . sprintf('%02d', rnd(5, 14)) . ' ' . rnd(9, 16) . ':' . rnd(10, 59) . ':00')) : null;
+        $lunas = $nasib === 'lunas' ? date('Y-m-d H:i:s', strtotime(substr($jt, 0, 7) . '-' . sprintf('%02d', rnd(3, 9)) . ' ' . rnd(9, 16) . ':' . rnd(10, 59) . ':00')) : null;
         $tid = ins($ov, 'pbjt_tagihan', ['wp_id' => $key, 'masa' => $masa, 'pajak' => $pajak, 'status' => $lunas ? 'lunas' : 'terbit',
             'jatuh_tempo' => $jt, 'snap_va_id' => $va['id'], 'va_no' => trim($va['va_no']), 'dibayar' => $lunas ? $pajak : null, 'lunas_pada' => $lunas,
             'dibuat_oleh' => 'bapenda#1', 'dibuat_pada' => $terbit, 'diubah_pada' => $lunas ?: $terbit]);

@@ -2,7 +2,7 @@ INSERT INTO `language` (`phrase`, `english`) VALUES('assignto', 'Assign To');
 INSERT INTO `language` (`phrase`, `english`) VALUES('underprocess', 'Under Process');
 INSERT INTO `language` (`phrase`, `english`) VALUES('addnew_checklist', 'New Checklist');
 INSERT INTO `language` (`phrase`, `english`) VALUES('task_name', 'Task Name');
-INSERT INTO `language` (`phrase`, `english`) VALUES('checklist', 'Cheklist');
+INSERT INTO `language` (`phrase`, `english`) VALUES('checklist', 'Checklist');
 INSERT INTO `language` (`phrase`, `english`) VALUES( 'in_use', 'In Use');
 INSERT INTO `language` (`phrase`, `english`) VALUES( 'in_laundry', 'In Laundry');
 INSERT INTO `language` (`phrase`, `english`) VALUES( 'ready', 'Ready');
@@ -45,4 +45,4 @@ INSERT INTO `acc_coa` (`HeadCode`, `HeadName`, `PHeadName`, `HeadLevel`, `IsActi
 INSERT INTO `position` (`pos_id`, `position_name`, `position_details`) VALUES
 (6, 'House Keeper', 'House keepers are worked as room cleaner and laundry iteam carrier for the hotel');
 INSERT INTO `tbl_category` (`category_id`, `categoryname`, `status`) VALUES
-(501, 'Houekeeping products', '1');
+(501, 'Housekeeping products', '1');

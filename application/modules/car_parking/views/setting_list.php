@@ -72,15 +72,11 @@
                                         </div>
                                         <div class="col-md-12 col-lg-4 d-flex align-items-center mb-4 mb-lg-0">
                                             <div class="col-md-10 pt-2">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="w-50 p-0">
-                                                        <button type="submit"
-                                                            class="btn btn-success btn-lg w-100"><?php echo display("submit") ?></button>
-                                                    </div>
-                                                    <div class="w-50 p-1">
-                                                        <button type="submit"
-                                                            class="btn btn-danger btn-lg w-100"><?php echo display("reset") ?></button>
-                                                    </div>
+                                                <div class="d-flex align-items-center flex-wrap" style="gap:8px">
+                                                    <button type="submit"
+                                                        class="btn btn-success text-nowrap flex-fill"><?php echo display("submit") ?></button>
+                                                    <button type="reset"
+                                                        class="btn btn-danger text-nowrap flex-fill"><?php echo display("reset") ?></button>
                                                 </div>
                                             </div>
                                         </div>

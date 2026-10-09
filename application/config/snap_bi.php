@@ -31,7 +31,7 @@ return array_replace_recursive([
     'pbjt_profile' => 'bapenda',
 
     // Tanggal jatuh tempo PBJT di bulan setelah masa. SESUAIKAN dengan Perda/Perkada.
-    'pbjt_tanggal_jatuh_tempo' => 15,
+    'pbjt_tanggal_jatuh_tempo' => 10, // tgl 10 bulan berikutnya (Skenario Uji RK-04)
     // Tagihan yang diterbitkan setelah jatuh tempo: VA aktif selama N hari sejak terbit.
     'pbjt_masa_aktif_va_terlambat' => 7,
 

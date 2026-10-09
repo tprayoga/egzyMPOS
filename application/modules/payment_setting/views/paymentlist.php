@@ -1,10 +1,11 @@
 <div class="card">
-    <?php if($this->permission->method('payment_setting','create')->access()): ?>
-
     <div class="card-header">
-        <h4><?php echo display('paymentmethod_list') ?></h4>
+        <h4><?php echo display('paymentmethod_list') ?><small
+                class="float-right"><?php if($this->permission->method('payment_setting','create')->access()): ?><button
+                    type="button" class="btn btn-primary btn-md" data-target="#add0" data-toggle="modal"><i
+                        class="fa fa-plus-circle" aria-hidden="true"></i>
+                    <?php echo display('add_new')?></button><?php endif; ?></small></h4>
     </div>
-    <?php endif; ?>
 
     <div id="add0" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
