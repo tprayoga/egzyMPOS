@@ -170,4 +170,4 @@
     </div>
 </div>
 <input type="hidden" id="parkingId" value="">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/book_parking.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/book_parking.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/book_parking.js'); ?>"></script>

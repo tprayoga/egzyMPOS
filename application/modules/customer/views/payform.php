@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module; ?>/assets/css/payform.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module; ?>/assets/css/payform.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/payform.css'); ?>">
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="panel">
@@ -73,4 +73,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/payform.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/payform.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/payform.js'); ?>"></script>

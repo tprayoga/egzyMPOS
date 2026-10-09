@@ -8,7 +8,7 @@ function printDiv(divName) {
     
 }
 </script>
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/res_details.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/res_details.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/res_details.css'); ?>">
 <!-- Printable area end -->
 <div class="row">
     <div class="col-sm-12">

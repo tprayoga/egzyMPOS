@@ -34,6 +34,7 @@
                                                  class="text-danger">*</span></label>
                                          <div class="col-sm-8">
                                              <?php echo form_dropdown('task_name',$checklistdropdown,'','id="task_name" class="form-control" required') ?>
+                                        <small class="text-muted d-block mt-1">Task Name diambil dari <a href="<?php echo base_url('house_keeping/checklist'); ?>">House Keeping &gt; Checklist</a> dengan Type = Laundry<?php if (count(array_filter(array_keys((array) $checklistdropdown), 'strlen')) === 0) { ?> — <span class="text-danger">belum ada, tambahkan dulu (mis. "Cuci &amp; setrika")</span><?php } ?>.</small>
                                          </div>
                                      </div>
                                      <div class="form-group row">

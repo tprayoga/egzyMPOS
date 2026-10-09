@@ -118,20 +118,25 @@ class report_model extends CI_Model {
         return false;
 	
 	}
+	/**
+	 * Laporan stok: dibeli, diretur, rusak, terpakai, dan stok saat ini (products.stock — dijaga oleh
+	 * pembelian, retur, dan produk rusak). Dulu hanya SUM qty pembelian, sehingga retur/produk rusak
+	 * tidak pernah mengurangi stok di laporan, dan nilai = SUM(harga satuan) x qty (salah).
+	 */
 	public function getstocklist()
 	{
-		
-		$this->db->select("products.product_name,unit_of_measurement.uom_name,unit_of_measurement.uom_short_code,purchase_details.*,SUM(purchase_details.quantity) as qty,SUM(purchase_details.price) as sumprice");
-		$this->db->from('purchase_details');
-		$this->db->join('products','products.id = purchase_details.proid', 'left');
-		$this->db->join('unit_of_measurement','unit_of_measurement.id = products.uom_id', 'Inner');
-		$this->db->group_by('purchase_details.proid');
-		$this->db->order_by('purchase_details.purchaseid','desc');
-		$query = $this->db->get();
-		return $query->result();
-	
+		return $this->db->query("SELECT p.id, p.product_name, u.uom_short_code,
+				COALESCE(pd.qty, 0) dibeli, COALESCE(pd.nilai, 0) nilai_beli,
+				COALESCE(pr.qty, 0) diretur, COALESCE(p.destroyed, 0) rusak, COALESCE(p.used, 0) terpakai,
+				COALESCE(p.stock, 0) stok
+			FROM products p
+			LEFT JOIN unit_of_measurement u ON u.id = p.uom_id
+			LEFT JOIN (SELECT proid, SUM(quantity) qty, SUM(totalprice) nilai FROM purchase_details GROUP BY proid) pd ON pd.proid = p.id
+			LEFT JOIN (SELECT product_id, SUM(qty) qty FROM purchase_return_details GROUP BY product_id) pr ON pr.product_id = p.id
+			WHERE pd.proid IS NOT NULL OR p.stock <> 0 OR p.destroyed <> 0
+			ORDER BY p.product_name")->result();
 	}
-	
+
 	public function details($id)
 	{
 		

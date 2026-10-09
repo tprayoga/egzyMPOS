@@ -175,4 +175,4 @@
 
 </div>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/script.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/script.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/script.js'); ?>"></script>

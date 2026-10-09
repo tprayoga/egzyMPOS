@@ -62,6 +62,6 @@
 </div>
 <input type="hidden" id="menuItem" value="<?php echo html_escape($menu_item->parent_menu);?>">
  
-<script src="<?php echo MOD_URL.$module;?>/assets/js/menupermissionEdit.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/menupermissionEdit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/menupermissionEdit.js'); ?>"></script>
 
  

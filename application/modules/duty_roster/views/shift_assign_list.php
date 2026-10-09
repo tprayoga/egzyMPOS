@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <div id="edit" class="modal fade bd-example-modal-lg" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">

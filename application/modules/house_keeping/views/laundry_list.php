@@ -1,4 +1,4 @@
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/laundry_list.css">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/laundry_list.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/laundry_list.css'); ?>">
 <div id="add0" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -160,4 +160,4 @@
 </div>
 <input type="hidden" id="product_list" value="">
 <input type="hidden" id="all_checklist" value="">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/laundry_list.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/laundry_list.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/laundry_list.js'); ?>"></script>

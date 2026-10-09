@@ -1,5 +1,5 @@
-<script src="<?php echo MOD_URL.$module;?>/assets/js/prechaseReport.js"></script>
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css">
+<script src="<?php echo MOD_URL.$module;?>/assets/js/prechaseReport.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/prechaseReport.js'); ?>"></script>
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/table.css'); ?>">
 
 <div class="row">
     <div class="col-sm-12 col-md-12">

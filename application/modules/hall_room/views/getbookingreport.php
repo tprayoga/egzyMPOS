@@ -1,4 +1,4 @@
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/table.css'); ?>">
 <?php if(!empty($report)){?>
 <table width="100%" class="datatable table table-striped table-bordered table-hover" id="hexdatatable">
     <thead>
@@ -103,4 +103,4 @@ else{?>
                                     ?>
 </span>
 <input type="hidden" id="checktable" value="<?php echo $i; ?>">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/searchReport.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/searchReport.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/searchReport.js'); ?>"></script>

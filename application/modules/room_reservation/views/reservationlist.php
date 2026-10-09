@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/custom.css'); ?>">
 <div class="row" id="booking_list">
     <div class="col-md-12 mb-3">
         <div class="card">
@@ -69,4 +69,4 @@
 </div>
 <div id="printreservation" hidden>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/reservationList.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/reservationList.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/reservationList.js'); ?>"></script>

@@ -43,4 +43,4 @@ $status = array(
     <button type="submit" id="stsbmit" class="btn btn-success w-md m-b-5"><?php echo display('ad') ?></button>
 </div>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/roomfromstatus.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/roomfromstatus.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/roomfromstatus.js'); ?>"></script>

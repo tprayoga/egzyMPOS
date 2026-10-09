@@ -31,7 +31,7 @@ $status = array(
                                     <div class="col-sm-8 customesl pl-0">
                                         <?php echo form_dropdown('employee_id',$allhousekeeper,'', 'class="selectpicker form-control" data-live-search="true" id="employee_id" required') ?>
                                         <?php if (count($allhousekeeper) <= 1) { ?>
-                                        <small class="text-danger d-block mt-1">Belum ada House Keeper yang bertugas saat ini. Pastikan pegawai berposisi House Keeper dan sudah dijadwalkan di Duty Roster (Roster assign).</small>
+                                        <small class="text-danger d-block mt-1">Belum ada House Keeper yang bertugas saat ini. Pastikan pegawai berposisi House Keeper dan dijadwalkan di Duty Roster (Roster assign) untuk shift yang sedang berjalan, serta tidak tercatat cuti/absen.</small>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -100,4 +100,4 @@ $status = array(
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/assign_room_cleaning.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/assign_room_cleaning.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/assign_room_cleaning.js'); ?>"></script>

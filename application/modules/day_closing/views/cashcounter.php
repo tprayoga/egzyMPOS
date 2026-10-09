@@ -50,4 +50,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/cashcounter.js" type="text/javascript"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/cashcounter.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/cashcounter.js'); ?>" type="text/javascript"></script>

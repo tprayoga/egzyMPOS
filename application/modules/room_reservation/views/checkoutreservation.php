@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css">
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/poolprint.css">
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/custom.css'); ?>">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/poolprint.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/poolprint.css'); ?>">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/checkoutview.css'); ?>">
 <div class="form-group row">
     <div class="invalid-feedback" id="cmsg" hidden></div>
     <label
@@ -1138,5 +1138,5 @@
         <?php } ?>
     </div>
     <input type="hidden" id="finyear" value="<?php echo financial_year(); ?>">
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js"></script>
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/checkoutreservation.js"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/custom.js'); ?>"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/checkoutreservation.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/checkoutreservation.js'); ?>"></script>

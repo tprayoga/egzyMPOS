@@ -109,4 +109,4 @@
                </div>
            </div>
        </div>
-       <script src="<?php echo MOD_URL.$module;?>/assets/js/salarySetup.js"></script>
+       <script src="<?php echo MOD_URL.$module;?>/assets/js/salarySetup.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/salarySetup.js'); ?>"></script>

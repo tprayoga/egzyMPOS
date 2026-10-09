@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/widgetList.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/widgetList.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/widgetList.js'); ?>"></script>
 
 
 

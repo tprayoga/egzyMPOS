@@ -81,7 +81,7 @@
                                     <?php echo html_escape($zone->zone_type); ?></td>
                                 <td class="invp-14">
                                     <?php echo html_escape($slot->slot_type); ?></td>
-                                <?php $parking = $this->db->select("price,vat")->from("tbl_parkingSetting")->where("parkingSetting_id", $row->parkingSetting_id)->get()->row(); ?>
+                                <?php $parking = $this->db->select("price,vat")->from("tbl_parkingsetting")->where("parkingSetting_id", $row->parkingSetting_id)->get()->row(); ?>
                                 <td class="invp-14"> <?php $subtotal += $parking->price; $tax += ($parking->vat*$parking->price)/100; echo html_escape($parking->price); ?>
                                 </td>
                                 <td class="invp-14">

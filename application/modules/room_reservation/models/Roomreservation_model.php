@@ -443,7 +443,7 @@ public function findBypayId($id = null)
 	}
 	public function carParkingCust($id){
 		$this->db->select("ci.*");
-		$this->db->from("tbl_bookParking bp");
+		$this->db->from("tbl_bookparking bp");
 		$this->db->join("booked_info bi","bi.bookedid=bp.bookedid","left");
 		$this->db->join("customerinfo ci","ci.customerid=bi.cutomerid","left");
 		$this->db->where("bp.bookParking_id", $id);
@@ -453,7 +453,7 @@ public function findBypayId($id = null)
 	}
 	public function parkingDetailsList($id){
 		$this->db->select('bp.*');
-        $this->db->from('tbl_bookParking bp');
+        $this->db->from('tbl_bookparking bp');
 		$this->db->where('bookParking_id',$id);
         $query = $this->db->get();
 	    $row = $query->row();

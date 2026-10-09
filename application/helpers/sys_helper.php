@@ -89,9 +89,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $row = $currency->row();
         return $row;
     }
+    /**
+     * Pastikan ada tahun buku yang mencakup hari ini. Bila TIDAK ADA satu pun (tabel kosong, atau
+     * tahun terakhir sudah lewat), buat tahun kalender berjalan mulai setelah tahun terakhir.
+     * Tanpa ini booking/POS ditolak ("Please Create Financial Year First") dan datepicker rusak.
+     * Tahun yang mencakup hari ini tapi sengaja dinonaktifkan tidak diubah.
+     */
+    if (!function_exists('egzy_ensure_financial_year')) {
+        function egzy_ensure_financial_year(){
+            static $done = array();
+            $ci =& get_instance();
+            $ci->load->database();
+            $key = $ci->db->database;
+            if (isset($done[$key]) || !$ci->db->table_exists('tbl_financialyear')) return;
+            $done[$key] = true;
+            $today = date('Y-m-d');
+            $cover = $ci->db->query("SELECT 1 FROM tbl_financialyear WHERE start_date <= ? AND end_date >= ? LIMIT 1", array($today, $today))->row();
+            if ($cover) return;
+            $last = $ci->db->query("SELECT MAX(end_date) m FROM tbl_financialyear")->row();
+            $start = date('Y') . '-01-01';
+            if ($last && $last->m && $last->m >= $start) $start = date('Y-m-d', strtotime($last->m . ' +1 day'));
+            if ($start > $today) return;
+            $ci->db->insert('tbl_financialyear', array('title' => date('Y'), 'start_date' => $start, 'end_date' => date('Y') . '-12-31',
+                'date_time' => date('Y-m-d H:i:s'), 'is_active' => '2', 'create_by' => '1'));
+            log_message('error', 'Tahun buku ' . date('Y') . " dibuat otomatis ($start s.d. " . date('Y') . '-12-31) di ' . $key);
+        }
+    }
+
     function financial_year(){
         $ci =& get_instance();
         $ci->load->database();
+        egzy_ensure_financial_year();
         $ci->db->select("COUNT(fiyear_id) as num");
         $ci->db->from("tbl_financialyear");
         $ci->db->where("start_date<=",date("Y-m-d"));
@@ -104,6 +132,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     function maxfindate(){
         $ci =& get_instance();
         $ci->load->database();
+        egzy_ensure_financial_year();
         $ci->db->select("end_date");
         $ci->db->from("tbl_financialyear");
         $ci->db->where("start_date<=",date("Y-m-d"));
@@ -143,6 +172,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             if ($cfg === null) $cfg = require APPPATH . 'config/pbjt_db.php';
             $ci =& get_instance();
             return isset($ci->db) && is_object($ci->db) && $ci->db->database === $cfg['oversight_db'];
+        }
+    }
+
+
+    /**
+     * URL aset lokal + ?v=<waktu modifikasi>. Versi tetap (mis. ?v=1) membuat Cloudflare/browser terus
+     * menyajikan CSS/JS lama setelah deploy (Skenario Uji: tab POS "belum hitam").
+     */
+    if (!function_exists('egzy_asset')) {
+        function egzy_asset($path){
+            $path = ltrim(preg_replace('/\?.*$/', '', $path), '/');
+            $mt = @filemtime(FCPATH . $path);
+            return base_url($path) . ($mt ? '?v=' . $mt : '');
         }
     }
 

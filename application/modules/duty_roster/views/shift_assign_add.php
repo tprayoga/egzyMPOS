@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <div class="row">
     <div class="col-md-12 mb-3">
         <div class="card">

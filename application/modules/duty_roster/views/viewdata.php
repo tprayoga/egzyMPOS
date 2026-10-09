@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <div class="row justify-content-center">
     <div class="col-sm-12" id="printin">
 

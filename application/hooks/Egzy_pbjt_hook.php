@@ -9,8 +9,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Egzy_pbjt_hook
 {
+    private static $done = false;
+
+    /**
+     * post_controller_constructor: pasang juga sebagai shutdown function. Banyak aksi POS mengakhiri
+     * request dengan exit (mis. pos_order mencetak struk lalu exit), sehingga hook post_controller tidak
+     * pernah jalan dan VAT bill tetap nilai kiriman browser (ditemukan UAT-14, 9 Okt 2026).
+     */
+    public function arm()
+    {
+        $CI =& get_instance();
+        if (!$CI || $CI->input->method() !== 'post') return;
+        register_shutdown_function([$this, 'sync']);
+    }
+
     public function sync()
     {
+        if (self::$done) return;
         $CI =& get_instance();
         if (!$CI || !isset($CI->router, $CI->db) || $CI->input->method() !== 'post') return;
         $module = method_exists($CI->router, 'fetch_module') ? (string) $CI->router->fetch_module() : '';
@@ -19,6 +34,7 @@ class Egzy_pbjt_hook
         try {
             require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
             $tarif = Pbjt_pajak::tarif();
+            self::$done = true;
             if ($module === 'ordermanage') {
                 Pbjt_pajak::sinkronResto($CI->db->conn_id, $CI->db->database, $tarif, true);
             } else {

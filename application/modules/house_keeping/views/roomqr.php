@@ -1,4 +1,4 @@
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/roomqr.css">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/roomqr.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/roomqr.css'); ?>">
 
 <div class="row">
     <div class="col-sm-12 col-md-12">

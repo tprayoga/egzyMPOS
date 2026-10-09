@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/endfinancial_year.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/endfinancial_year.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/endfinancial_year.css'); ?>">
 <div class="row">
     <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -36,4 +36,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/endfinancial_year.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/endfinancial_year.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/endfinancial_year.js'); ?>"></script>

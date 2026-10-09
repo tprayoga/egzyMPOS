@@ -1,4 +1,4 @@
-<script src="<?php echo MOD_URL.$module;?>/assets/js/updateCanInfo.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/updateCanInfo.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/updateCanInfo.js'); ?>"></script>
 
 
 <ul class="nav nav-tabs">
@@ -269,4 +269,4 @@
     </div>
 </div>
 <?php echo form_close() ?>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/updateCanInfoBelow.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/updateCanInfoBelow.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/updateCanInfoBelow.js'); ?>"></script>

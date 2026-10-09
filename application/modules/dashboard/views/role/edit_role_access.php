@@ -52,4 +52,4 @@
 
 <input type="hidden" id="fk_user" value="<?php echo html_escape($info->fk_user_id);?>">
 <input type="hidden" id="fk_role" value="<?php echo html_escape($info->fk_role_id);?>">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/editRoleAccess.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/editRoleAccess.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/editRoleAccess.js'); ?>"></script>

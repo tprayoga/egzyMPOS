@@ -14,20 +14,15 @@ class Home extends MX_Controller {
 		if (! $this->session->userdata('isLogIn'))
 			redirect('login');
  	}
+	/** Angka ringkas gaya Indonesia: 1.250 / 12,5 rb / 240,3 jt / 1,2 M / 3,4 T. */
 	public function changeformat($num) {
-			  if($num>1000) {
-					$x = round($num);
-					$x_number_format = number_format($x);
-					$x_array = explode(',', $x_number_format);
-					$x_parts = array('k', 'm', 'b', 't');
-					$x_count_parts = count($x_array) - 1;
-					$x_display = $x;
-					$x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
-					$x_display .= $x_parts[$x_count_parts - 1];
-					return $x_display;
-			  }
-		  return $num;
+		$num = (float) $num;
+		if (abs($num) < 10000) return number_format($num, 0, ',', '.');
+		foreach (array(1e12 => 'T', 1e9 => 'M', 1e6 => 'jt', 1e3 => 'rb') as $div => $unit) {
+			if (abs($num) >= $div) return rtrim(rtrim(number_format($num / $div, 1, ',', '.'), '0'), ',') . ' ' . $unit;
 		}
+		return number_format($num, 0, ',', '.');
+	}
 	public function index()
 	{   
 		// Tenant restoran (jenis_usaha di registry tenant) tidak punya kamar/booking:
@@ -47,7 +42,7 @@ class Home extends MX_Controller {
 		$todayorder=$this->home_model->todayorder();
 		$data["todaybooking"]  = $this->changeformat($todayorder);
 		$totalamount=$this->home_model->totalamount();
-		$data["totalamount"]  = $this->changeformat($totalamount->amount);
+		$data["totalamount"]  = 'Rp ' . $this->changeformat($totalamount->amount); // dulu "240.3m"
 		$customer=$this->home_model->totalcustomer();
 		$data["totalcustomer"]  = $this->changeformat($customer);
 		$data['customerlist']=$this->home_model->customerlist();
@@ -100,6 +95,13 @@ class Home extends MX_Controller {
 		$data["shortmonthname"]=trim($shortmonths,',');
 		#page path 
 		$data['module'] = "dashboard";  
+		// Hotel yang juga punya restoran: ringkasan restoran di dashboard yang sama (catatan penguji
+		// "Dashboard hotel dan resto").
+		if ($this->db->count_all('customer_order') > 0) {
+			require_once APPPATH . 'modules/pbjt/libraries/Pbjt_pajak.php';
+			$data['resto_sum'] = $this->home_model->resto_summary();
+			$data['tarif_pbjt'] = Pbjt_pajak::tarif();
+		}
 		$data['page']   = "home/home";  
 		echo Modules::run('template/layout', $data); 
 	}

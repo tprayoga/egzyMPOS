@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/roomlist.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/roomlist.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/roomlist.css'); ?>">
 
 <?php
 $status = array(
@@ -75,4 +75,4 @@ $status = array(
 </div>
 <?php $sl++; ?>
 <?php } ?>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/timer.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/timer.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/timer.js'); ?>"></script>

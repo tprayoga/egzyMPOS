@@ -30,6 +30,14 @@ $hook['post_controller'][] = array(
     'filepath' => 'hooks',
 );
 
+// Sesi terikat ke DB tenant tempat login (cegah ganti cookie tnt ke WP lain). PALING AWAL.
+$hook['post_controller_constructor'][] = array(
+    'class'    => 'Egzy_tenant_guard',
+    'function' => 'check',
+    'filename' => 'Egzy_tenant_guard.php',
+    'filepath' => 'hooks',
+);
+
 // Instance Bapenda (DB oversight): tolak modul operasional hotel/resto di server.
 $hook['post_controller_constructor'][] = array(
     'class'    => 'Egzy_oversight_guard',
@@ -43,5 +51,20 @@ $hook['post_controller_constructor'][] = array(
     'class'    => 'Egzy_timezone',
     'function' => 'apply',
     'filename' => 'Egzy_timezone.php',
+    'filepath' => 'hooks',
+);
+
+$hook['post_controller'][] = array(
+    'class'    => 'Egzy_tenant_guard',
+    'function' => 'bind',
+    'filename' => 'Egzy_tenant_guard.php',
+    'filepath' => 'hooks',
+);
+
+// Sama, untuk aksi yang diakhiri exit sebelum post_controller (shutdown function).
+$hook['post_controller_constructor'][] = array(
+    'class'    => 'Egzy_pbjt_hook',
+    'function' => 'arm',
+    'filename' => 'Egzy_pbjt_hook.php',
     'filepath' => 'hooks',
 );

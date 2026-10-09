@@ -277,4 +277,4 @@ echo form_input($add3); ?>
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/attendanceList.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/attendanceList.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/attendanceList.js'); ?>"></script>

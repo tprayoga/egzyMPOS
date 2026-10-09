@@ -1,6 +1,6 @@
 
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css">
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/custom.css'); ?>">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/checkoutview.css'); ?>">
 <div class="form-group row">
     <div class="invalid-feedback" id="cmsg" hidden></div>
     <label class="col-3 col-sm-3 col-md-3 col-lg-2 col-xl-2 col-form-label text-right font-weight-600"><?php echo display("room_no") ?> :</label>
@@ -19,5 +19,5 @@
 </div>
 <div id="checkoutdetail">
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/checkout.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/custom.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/checkout.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/checkout.js'); ?>"></script>

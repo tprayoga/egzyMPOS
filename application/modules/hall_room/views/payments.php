@@ -112,4 +112,4 @@
                 </div>
               </div>
               <input type="hidden" id="booking_id" value="<?php echo $bookinginfo->bookedid; ?>">
-              <script src="<?php echo MOD_URL.$module;?>/assets/js/payments.js"></script>
+              <script src="<?php echo MOD_URL.$module;?>/assets/js/payments.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/payments.js'); ?>"></script>

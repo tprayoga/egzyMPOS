@@ -23,5 +23,5 @@
                         </div>
                     <?php echo form_close() ?>
                     
-<script src="<?php echo MOD_URL.$module;?>/assets/js/widget.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/widget.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/widget.js'); ?>"></script>
 

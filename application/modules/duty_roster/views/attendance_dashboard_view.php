@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <body>
     <div class="card mb-4">
         <div class="card-body">
@@ -50,4 +50,4 @@
     </div>
 </body>
 </html>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/dashboard_footer.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/dashboard_footer.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/dashboard_footer.js'); ?>"></script>

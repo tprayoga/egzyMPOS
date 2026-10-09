@@ -116,8 +116,8 @@ class Housekeeping_model extends CI_Model {
 		->from('employee_history eh')
 		->join('tbl_emproster_assign ra','ra.emp_id=eh.employee_id','left')
 		->where('cast(concat(ra.emp_startroster_date, " ", ra.emp_startroster_time) as datetime) <= ',$day)
-		->where('cast(concat(ra.emp_endroster_date," ", ra.emp_endroster_time) as datetime) >=',$day)
-		->where('ra.is_complete',1)
+		->where("cast(concat(ra.emp_endroster_date,' ',ra.emp_endroster_time) as datetime) + INTERVAL IF(TRIM(ra.emp_endroster_time) < TRIM(ra.emp_startroster_time) AND ra.emp_endroster_date = ra.emp_startroster_date, 1, 0) DAY >= " . $this->db->escape($day), NULL, FALSE) // shift lewat tengah malam (mis. 22:00-06:00)
+		->where_in('ra.is_complete', array(0, 1)) // terjadwal (belum absen) atau hadir; bukan cuti(2)/absen(3)
 		->where_in('eh.pos_id', position_ids(6))
 		->get()
 		->result();

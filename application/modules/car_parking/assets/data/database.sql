@@ -17,7 +17,7 @@ CREATE TABLE `tbl_vehicle` (
   `isactive` int(3) DEFAULT 1,
   PRIMARY KEY (`vehicle_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-CREATE TABLE `tbl_parkingSetting` (
+CREATE TABLE `tbl_parkingsetting` (
   `parkingSetting_id` int(11) NOT NULL AUTO_INCREMENT,
   `zone_id` int(11) DEFAULT NULL,
   `vehicle_id` int(11) DEFAULT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE `tbl_parkingSetting` (
   `vat` decimal(5,2) DEFAULT 0,
   PRIMARY KEY (`parkingSetting_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-CREATE TABLE `tbl_bookParking` (
+CREATE TABLE `tbl_bookparking` (
   `bookParking_id` int(11) NOT NULL AUTO_INCREMENT,
   `bookedid` int(11) DEFAULT NULL,
   `parkingSetting_id` int(11) DEFAULT NULL,

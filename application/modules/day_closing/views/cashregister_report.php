@@ -1,6 +1,6 @@
-<script src="<?php echo MOD_URL.$module; ?>/assets/js/cashregister_report.js" type="text/javascript">
+<script src="<?php echo MOD_URL.$module; ?>/assets/js/cashregister_report.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/cashregister_report.js'); ?>" type="text/javascript">
 </script>
-<link href="<?php echo MOD_URL.$module;?>/assets/css/cashregister.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo MOD_URL.$module;?>/assets/css/cashregister.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/cashregister.css'); ?>" rel="stylesheet" type="text/css" />
 
 <div id="orderdetailsp" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">

@@ -120,4 +120,4 @@
         </div>
     </div>
 <input type="hidden" id="apweek" value="<?php echo html_escape($weekend) ?>">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/updateApplicationForm.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/updateApplicationForm.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/updateApplicationForm.js'); ?>"></script>

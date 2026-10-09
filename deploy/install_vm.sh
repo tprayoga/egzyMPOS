@@ -194,11 +194,11 @@ chmod 640 "$LOCAL_CFG"
 chmod 750 "$APP_DIR/pbjt_backup_cron.sh" "$APP_DIR/deploy/"*.sh
 chown -R www-data:www-data "$APP_DIR/application/cache" "$APP_DIR/application/logs" \
   "$APP_DIR/assets/img" "$APP_DIR/assets/data" "$BACKUP_DIR"
-# Folder upload gambar modul (foto menu restoran + thumbnail, foto pegawai). Dulu milik root ->
-# upload gagal diam-diam dan gambar menu tak pernah tampil (Skenario Uji TC-025).
-UPLOAD_DIRS="$APP_DIR/application/modules/ordermanage/assets/images $APP_DIR/application/modules/hrm/assets/images"
-for d in $UPLOAD_DIRS; do mkdir -p "$d"; done
-mkdir -p "$APP_DIR/application/modules/ordermanage/assets/images/"{big,medium,small}
+# Folder upload gambar modul (menu restoran + thumbnail, kamar, fasilitas, hall, pegawai) dan uploads/.
+# Dulu milik root -> upload gagal diam-diam dan gambar tak pernah tampil (Skenario Uji TC-013, TC-025).
+mkdir -p "$APP_DIR/application/modules/ordermanage/assets/images/"{big,medium,small} "$APP_DIR/uploads"
+for m in room_setting room_facilities hall_room hrm; do mkdir -p "$APP_DIR/application/modules/$m/assets/images"; done
+UPLOAD_DIRS="$(ls -d "$APP_DIR"/application/modules/*/assets/images) $APP_DIR/uploads"
 chown -R www-data:www-data $UPLOAD_DIRS
 chmod 750 "$BACKUP_DIR"
 ok "Hanya cache, log, upload gambar, data aplikasi & folder backup yang bisa ditulis web server"
@@ -256,7 +256,7 @@ cat > /etc/apache2/sites-available/egzy.conf <<APACHE
         Require all granted
     </DirectoryMatch>
     # Folder upload yang bisa ditulis web server: sajikan sebagai berkas, jangan pernah dieksekusi.
-    <DirectoryMatch "^$APP_DIR/(application/modules/[^/]+/assets/images|assets/img)/">
+    <DirectoryMatch "^$APP_DIR/(application/modules/[^/]+/assets/images|assets/img|uploads)/">
         php_admin_flag engine off
         <FilesMatch "\.(php[0-9]?|phtml|phar)\$">
             Require all denied
@@ -361,7 +361,9 @@ chk module 404
 chk application/config/snap_bi.local.php 403 404
 chk snap_setup.php 403 404
 chk seed_demo.php 403 404
-for d in $UPLOAD_DIRS "$APP_DIR/application/modules/ordermanage/assets/images/small"; do
+for d in "$APP_DIR/application/modules/ordermanage/assets/images/small" "$APP_DIR/application/modules/room_setting/assets/images" \
+         "$APP_DIR/application/modules/room_facilities/assets/images" "$APP_DIR/application/modules/hall_room/assets/images" \
+         "$APP_DIR/application/modules/hrm/assets/images"; do
   if as_www test -w "$d"; then ok "$(printf '%-48s %s' "${d#$APP_DIR/}" 'bisa ditulis www-data')"; else echo "   ${C_R}✘${C_0} ${d#$APP_DIR/} tidak bisa ditulis www-data"; fail=$((fail+1)); fi
 done
 if ( cd "$APP_DIR" && as_www "$PHP_BIN" pbjt_test_isolation.php | tail -1 | grep -q "ISOLASI TENANT OK" ); then ok "Uji isolasi tenant: OK"; else echo "   ${C_R}✘${C_0} Uji isolasi tenant gagal"; fail=$((fail+1)); fi

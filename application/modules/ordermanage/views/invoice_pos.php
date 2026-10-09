@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <!-- Printable area start -->
 
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/invoice_pos.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/invoice_pos.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/invoice_pos.css'); ?>">
 
 <script type="text/javascript">
 function printDiv(divName) {

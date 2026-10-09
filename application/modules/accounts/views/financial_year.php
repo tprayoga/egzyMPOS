@@ -131,4 +131,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/financial_year.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/financial_year.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/financial_year.js'); ?>"></script>

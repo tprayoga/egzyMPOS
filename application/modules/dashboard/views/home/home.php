@@ -67,6 +67,10 @@
              </div>
          </div>
      </div>
+     <?php if (!empty($resto_sum)) { ?>
+     <div class="col-12"><h6 class="fs-15 font-weight-600 mb-3">Restoran</h6></div>
+     <div class="col-12"><?php $this->load->view('dashboard/home/_resto_cards', array('sum' => $resto_sum)); ?></div>
+     <?php } ?>
      <div class="col-lg-12 col-xl-12">
          <!--Basic apexMixedChart Chart-->
          <div class="card mb-4">
@@ -245,7 +249,7 @@
  <input type="hidden" id="totalpending" value='<?php echo html_escape($totalpending);?>'>
  <input type="hidden" id="totalcancel" value='<?php echo html_escape($totalcancel);?>'>
 
- <script src="<?php echo MOD_URL.$module;?>/assets/js/Chart.min.js" type="text/javascript"></script>
- <script src="<?php echo MOD_URL.$module;?>/assets/js/barchart.js"></script>
- <script src="<?php echo MOD_URL.$module;?>/assets/js/apexcharts.min.js"></script>
- <script src="<?php echo MOD_URL.$module;?>/assets/js/apexcharts.active.js"></script>
+ <script src="<?php echo MOD_URL.$module;?>/assets/js/Chart.min.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/Chart.min.js'); ?>" type="text/javascript"></script>
+ <script src="<?php echo MOD_URL.$module;?>/assets/js/barchart.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/barchart.js'); ?>"></script>
+ <script src="<?php echo MOD_URL.$module;?>/assets/js/apexcharts.min.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/apexcharts.min.js'); ?>"></script>
+ <script src="<?php echo MOD_URL.$module;?>/assets/js/apexcharts.active.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/apexcharts.active.js'); ?>"></script>

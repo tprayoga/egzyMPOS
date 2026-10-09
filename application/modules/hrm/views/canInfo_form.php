@@ -349,4 +349,4 @@
     </div>
 </div>
 <?php echo form_close() ?>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/canInfoForm.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/canInfoForm.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/canInfoForm.js'); ?>"></script>

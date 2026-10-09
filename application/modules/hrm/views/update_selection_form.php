@@ -45,4 +45,4 @@
             </div>
         </div>
     </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/selectionForm.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/selectionForm.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/selectionForm.js'); ?>"></script>

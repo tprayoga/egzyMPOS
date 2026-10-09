@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <div class="card-header tab_hotel card-roster-header">
     <ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
     <input type="hidden" id="changedate" value="<?php echo html_escape($change_date)?>">
@@ -106,5 +106,5 @@
 
     </div>
 
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/cngdate_view.js"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/cngdate_view.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/cngdate_view.js'); ?>"></script>
 

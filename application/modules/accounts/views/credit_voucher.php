@@ -106,5 +106,5 @@
 <?php foreach ($acc as $acc2) {?><option value='<?php echo html_escape($acc2->HeadCode);?>'><?php echo html_escape($acc2->HeadName);?></option><?php }?>
 </div>
 <?php $checkModule = $this->db->where('directory', 'day_closing')->where('status', 1)->get('module')->num_rows(); if ($checkModule == 1) { ?>
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/dayClosing.js"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/dayClosing.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/dayClosing.js'); ?>"></script>
 <?php } ?>

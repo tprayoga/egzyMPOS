@@ -128,7 +128,7 @@ class Room_reservation extends MX_Controller
 			$scharge = $this->db->select("servicecharge")->from("setting")->get()->row();
 			$car_parking = $this->db->where('directory', 'car_parking')->where('status', 1)->get('module')->num_rows();
 			if ($car_parking == 1) {
-				$car_parking = $this->db->select("total_price")->from("tbl_bookParking")->where("bookedid", $value->bookedid)->get()->result();
+				$car_parking = $this->db->select("total_price")->from("tbl_bookparking")->where("bookedid", $value->bookedid)->get()->result();
 			}
 			$totalTax = 0;
 			$totalScharge = 0;
@@ -272,7 +272,7 @@ class Room_reservation extends MX_Controller
 			$scharge = $this->db->select("servicecharge")->from("setting")->get()->row();
 			$car_parking = $this->db->where('directory', 'car_parking')->where('status', 1)->get('module')->num_rows();
 			if ($car_parking == 1) {
-				$car_parking = $this->db->select("total_price")->from("tbl_bookParking")->where("bookedid", $value->bookedid)->get()->result();
+				$car_parking = $this->db->select("total_price")->from("tbl_bookparking")->where("bookedid", $value->bookedid)->get()->result();
 			}
 			$totalTax = 0;
 			$totalScharge = 0;
@@ -519,8 +519,8 @@ class Room_reservation extends MX_Controller
 			} else {
 				$allhallroom = "";
 			}
-			if ($this->db->table_exists('tbl_bookParking')) {
-				$allcarParking[$i] = $this->db->select('bp.total_price,bp.bookParking_id,c.firstname')->from("tbl_bookParking bp")->join("booked_info bi", "bi.bookedid=bp.bookedid", "left")->join("customerinfo c", "c.customerid=bi.cutomerid", "left")->where("bp.bookedid", $bdetails[$i]->bookedid)->where("c.customerid", $bdetails[$i]->cutomerid)->where("bp.status", 1)->where("bp.paymentStatus", 0)->get()->result();
+			if ($this->db->table_exists('tbl_bookparking')) {
+				$allcarParking[$i] = $this->db->select('bp.total_price,bp.bookParking_id,c.firstname')->from("tbl_bookparking bp")->join("booked_info bi", "bi.bookedid=bp.bookedid", "left")->join("customerinfo c", "c.customerid=bi.cutomerid", "left")->where("bp.bookedid", $bdetails[$i]->bookedid)->where("c.customerid", $bdetails[$i]->cutomerid)->where("bp.status", 1)->where("bp.paymentStatus", 0)->get()->result();
 			} else {
 				$allcarParking = "";
 			}
@@ -574,8 +574,8 @@ class Room_reservation extends MX_Controller
 			} else {
 				$allhallroom = "";
 			}
-			if ($this->db->table_exists('tbl_bookParking')) {
-				$allcarParking[$i] = $this->db->select('bp.total_price,bp.bookParking_id,c.firstname')->from("tbl_bookParking bp")->join("booked_info bi", "bi.bookedid=bp.bookedid", "left")->join("customerinfo c", "c.customerid=bi.cutomerid", "left")->where("bp.bookedid", $bdetails[$i]->bookedid)->where("c.customerid", $bdetails[$i]->cutomerid)->where("bp.status", 1)->where("bp.paymentStatus", 0)->get()->result();
+			if ($this->db->table_exists('tbl_bookparking')) {
+				$allcarParking[$i] = $this->db->select('bp.total_price,bp.bookParking_id,c.firstname')->from("tbl_bookparking bp")->join("booked_info bi", "bi.bookedid=bp.bookedid", "left")->join("customerinfo c", "c.customerid=bi.cutomerid", "left")->where("bp.bookedid", $bdetails[$i]->bookedid)->where("c.customerid", $bdetails[$i]->cutomerid)->where("bp.status", 1)->where("bp.paymentStatus", 0)->get()->result();
 			} else {
 				$allcarParking = "";
 			}
@@ -771,7 +771,7 @@ class Room_reservation extends MX_Controller
 				}
 				if (!empty($parking_id)) {
 					$sparking_id = explode(",", $parking_id);
-					$this->db->where_in("bookParking_id", $sparking_id)->update("tbl_bookParking", array('status' => 0));
+					$this->db->where_in("bookParking_id", $sparking_id)->update("tbl_bookparking", array('status' => 0));
 				}
 				$roomno = $this->db->select("room_no")->from("booked_info")->where("bookedid", $bid[$i])->get()->row();
 				$singleroom = explode(",", $roomno->room_no);
@@ -3051,7 +3051,7 @@ class Room_reservation extends MX_Controller
 		$scharge = $this->db->select("servicecharge")->from("setting")->get()->row();
 		$car_parking = $this->db->where('directory', 'car_parking')->where('status', 1)->get('module')->num_rows();
 		if ($car_parking == 1) {
-			$car_parking = $this->db->select("total_price")->from("tbl_bookParking")->where("bookedid", $details->bookedid)->get()->result();
+			$car_parking = $this->db->select("total_price")->from("tbl_bookparking")->where("bookedid", $details->bookedid)->get()->result();
 		}
 		$details->p_status = "No";
 		$datediff = strtotime($details->checkoutdate) - strtotime($details->checkindate);

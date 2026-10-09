@@ -89,6 +89,7 @@ class Pbjt_pajak
             LEFT JOIN $t.roomdetails rd ON rd.roomid = CAST(SUBSTRING_INDEX(b.roomid, ',', 1) AS UNSIGNED)");
         if (!$r) return 0;
         $st = $db->prepare("UPDATE $t.booked_info SET harga_per_malam=?, jumlah_malam=?, bruto=?, dpp=?, pbjt=?, tarif_snapshot=? WHERE bookedid=?");
+        if (!$st) return 0; // DB tenant belum dimigrasi (009)
         $n = 0;
         while ($b = $r->fetch_assoc()) {
             $malam = self::jumlahMalam($b['checkindate'], $b['checkoutdate']);
@@ -125,6 +126,7 @@ class Pbjt_pajak
             . ($koreksiBillBelumBayar ? " OR (b.bill_status = 0 AND ROUND(b.VAT, 2) <> ROUND(IF(" . (int) $incl . ", 0, o.pbjt), 2))" : ''));
         if (!$r) return 0;
         $upO = $db->prepare("UPDATE $t.customer_order SET dpp=?, pbjt=?, tarif_snapshot=?, pbjt_basis=? WHERE order_id=?");
+        if (!$upO) return 0; // DB tenant belum dimigrasi (010)
         $n = 0;
         while ($o = $r->fetch_assoc()) {
             if ($o['bill_id'] !== null) {

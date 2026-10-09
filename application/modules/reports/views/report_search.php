@@ -1,5 +1,5 @@
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css">
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/report_search.css">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/table.css'); ?>">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/report_search.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/report_search.css'); ?>">
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="row">
     <div class="col-sm-12 col-md-12">
@@ -214,4 +214,4 @@
             </div>
         </div>
     </div>
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/searchReport.js"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/searchReport.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/searchReport.js'); ?>"></script>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/balance_sheet.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/balance_sheet.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/balance_sheet.css'); ?>">
 <div class="row mb-4">
     <div class="col-sm-12 col-md-12">
         <div class="card">

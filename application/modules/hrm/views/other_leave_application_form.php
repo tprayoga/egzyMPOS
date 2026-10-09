@@ -188,5 +188,5 @@
     </div>
 
 <input type="hidden" id="weekend" value="<?php echo html_escape($weekend) ?>">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/otherLeave.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/otherLeave.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/otherLeave.js'); ?>"></script>
 

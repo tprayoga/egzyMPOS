@@ -22,4 +22,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/roomAssign.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/roomAssign.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/roomAssign.js'); ?>"></script>

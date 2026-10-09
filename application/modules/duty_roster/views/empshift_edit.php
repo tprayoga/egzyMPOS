@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <?php
 
 $edempdata =  $this->db->select('*')->from('tbl_emproster_assign')->where('emp_startroster_date', $clk_date)->where('emp_id', $emp_id)->get()->row();
@@ -39,4 +39,4 @@ $eshiftdata =  $this->db->select('tbl_empwork_shift.*')
 </div>
 <?php echo form_close() ?>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/empshift_edit.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/empshift_edit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/empshift_edit.js'); ?>"></script>

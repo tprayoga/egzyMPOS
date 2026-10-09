@@ -347,6 +347,7 @@ class Hotel extends CI_Controller
 
 				$sessiondata = array(
 					'UserID' => $customerid,
+					'egzy_db' => $this->db->database, // sesi tamu terikat ke DB hotel ini
 					'UserEmail' => $email
 				);
 				$this->session->set_userdata($sessiondata);
@@ -419,6 +420,7 @@ class Hotel extends CI_Controller
 			if (!empty($exist)) {
 				$sessiondata = array(
 					'UserID' => $exist->customerid,
+					'egzy_db' => $this->db->database, // sesi tamu terikat ke DB hotel ini
 					'UserName' => $exist->firstname . ' ' . $exist->lastname,
 					'UserEmail' => $exist->email
 				);
@@ -1136,6 +1138,7 @@ class Hotel extends CI_Controller
 
 			$sessiondata = array(
 				'UserID' => $customerid,
+					'egzy_db' => $this->db->database, // sesi tamu terikat ke DB hotel ini
 				'UserName' => $guestfullname,
 				'UserEmail' => $email
 			);

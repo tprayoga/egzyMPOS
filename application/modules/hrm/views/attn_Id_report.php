@@ -42,4 +42,4 @@
             </div>
         </div>
     </div>
-    <script src="<?php echo MOD_URL.$module;?>/assets/js/attnIdReport.js"></script>
+    <script src="<?php echo MOD_URL.$module;?>/assets/js/attnIdReport.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/attnIdReport.js'); ?>"></script>

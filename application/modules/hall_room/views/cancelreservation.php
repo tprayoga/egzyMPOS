@@ -55,5 +55,5 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/reservationEdit.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/cancelreservation.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/reservationEdit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/reservationEdit.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/cancelreservation.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/cancelreservation.js'); ?>"></script>

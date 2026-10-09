@@ -123,7 +123,9 @@ class Auth extends MX_Controller
 						'last_logout' => $user->row()->last_logout,
 						'ip_address'  => $user->row()->ip_address,
 						'permission'  => json_encode(@$permission),
-						'label_permission'  => json_encode(@$permission1)
+						'label_permission'  => json_encode(@$permission1),
+						// Sesi terikat ke DB tenant hasil perutean login (lihat hooks/Egzy_tenant_guard.php).
+						'egzy_db'     => CI::$APP->db->database
 					);
 
 					//store date to session 

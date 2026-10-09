@@ -1,8 +1,8 @@
 <link
     href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
     rel="stylesheet">
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/poolprint.css">
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/poolprint.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/poolprint.css'); ?>">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/checkoutview.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/checkoutview.css'); ?>">
 <div class="row">
     <div class="col-lg-12 col-xl-6 d-flex">
         <div class="card flex-fill w-100 mb-4">
@@ -1111,5 +1111,5 @@
 </div>
 <input type="hidden" id="finyear" value="<?php echo financial_year(); ?>">
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/checkoutall.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/checkoutall.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/checkoutall.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/custom.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/custom.js'); ?>"></script>

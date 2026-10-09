@@ -617,3 +617,32 @@ fieldset:has(> legend:only-child) > legend { padding: 0 10px 0 0 !important; mar
   .dt-buttons { margin: 8px 0; }
   .footer-content .footer-text { flex-direction: column; gap: 4px; align-items: flex-start !important; }
 }
+
+/* ---------- Sidebar mode mini & ponsel (Skenario Uji, Perbaikan desain: "Menu Sidebar belum responsive") ----------
+   Mode mini (≥768px, diciutkan): dulu teks menu tetap tampil & terpotong jadi satu huruf, logo terpotong,
+   avatar lonjong. Kini hanya ikon di tengah, logo "E" kecil, avatar bulat; teks kembali saat sidebar di-hover. */
+@media (min-width: 768px) {
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-header { padding: 0 !important; justify-content: center; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-brand_icon { display: none !important; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-brand::before {
+    content: ""; display: block; width: 34px; height: 34px; background: url(../img/egzy-favicon-64.png) center / contain no-repeat;
+  }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .profile-element { justify-content: center; padding: 10px 0 !important; margin: 10px 8px !important; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .profile-element .profile-text { display: none !important; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .profile-element .avatar,
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .profile-element .avatar img { width: 34px !important; height: 34px !important; min-width: 34px; margin: 0 !important; border-radius: 50% !important; object-fit: cover; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-nav ul li { padding: 0 8px !important; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-nav ul li > a {
+    font-size: 0 !important; justify-content: center !important; padding: 11px 0 !important; text-align: center;
+  }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .sidebar-nav ul li > a i { font-size: 17px !important; margin: 0 !important; }
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .metismenu .has-arrow::after,
+  body.sidebar-collapse:not(.sidebar-collapse_hover) .sidebar-bunker .nav-second-level { display: none !important; }
+}
+/* Ponsel: sidebar yang dibuka tampil di atas navbar (dulu logo tertutup) */
+@media (max-width: 767px) {
+  .sidebar.sidebar-bunker { z-index: 1045 !important; }
+  .overlay.active { z-index: 1040 !important; }
+}
+/* Tabel: tombol aksi tetap satu baris (dulu menumpuk sehingga baris sangat tinggi) */
+.table td:has(> a.btn-sm), .table td:has(> .btn-sm) { white-space: nowrap; }

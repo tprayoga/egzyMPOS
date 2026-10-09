@@ -45,4 +45,4 @@
 </div>
 <?php endif; ?>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/room_cleaning.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/room_cleaning.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/room_cleaning.js'); ?>"></script>

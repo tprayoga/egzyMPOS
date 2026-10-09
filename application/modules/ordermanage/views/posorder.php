@@ -1437,7 +1437,7 @@ $scan1 = scandir('application/modules/');
 ?>
 <script src="<?php echo base_url('ordermanage/order/possettingjs') ?>" type="text/javascript"></script>
 <script src="<?php echo base_url('ordermanage/order/quickorderjs') ?>" type="text/javascript"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/possetting.js" type="text/javascript"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/possetting.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/possetting.js'); ?>" type="text/javascript"></script>
 
 
 <script>

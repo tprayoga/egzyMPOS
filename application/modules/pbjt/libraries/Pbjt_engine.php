@@ -26,10 +26,16 @@ class Pbjt_engine
             'ambang_skor'            => 50,
             // WP yang "dijalankan" oleh instance aplikasi ini (single-tenant).
             'app_tenant'             => 'WP002',
-            // SILO: DB oversight (Bapenda) & DB kontrol (registry tenant).
-            'oversight_db'           => 'hotelv3',
-            'control_db'             => 'pbjt_control',
+            // SILO: DB oversight (Bapenda) & DB kontrol (registry tenant) — default dari konfigurasi.
+            'oversight_db'           => null,
+            'control_db'             => null,
         ], $cfg);
+        if ($this->cfg['oversight_db'] === null || $this->cfg['control_db'] === null) {
+            $dir = defined('APPPATH') ? APPPATH : dirname(__DIR__, 3) . '/';
+            $c = require $dir . 'config/pbjt_db.php';
+            if ($this->cfg['oversight_db'] === null) $this->cfg['oversight_db'] = $c['oversight_db'];
+            if ($this->cfg['control_db'] === null) $this->cfg['control_db'] = $c['control_db'];
+        }
     }
 
     private function tarif()

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/update_employee_form.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/update_employee_form.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/update_employee_form.css'); ?>">
 <ul class="nav nav-tabs">
     <li class="active"><a class="active" data-toggle="tab" href="#home"><?php echo display('basic_info')?></a>
     </li>
@@ -823,21 +823,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="s_name"><?php echo display('ethnic_group')?></label>
-                                        <input type="text" class="form-control" id="ethnic" name="ethnic"
-                                            placeholder="Ethnic" value="<?php echo html_escape($data->ethnic_group);?>">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="eeo_class"><?php echo display('eeo_class_gp')?></label>
-                                        <input type="text" class="form-control" id="eeo_class" name="eeo_class"
-                                            placeholder="EEO Class Group"
-                                            value="<?php echo html_escape($data->eeo_class_gp);?>">
-                                    </div>
-                                </div>
+                                <!-- field etnis & kelas EEO (khas AS) disembunyikan atas permintaan penguji; nilai lama dipertahankan -->
+                                <input type="hidden" name="ethnic" value="<?php echo html_escape($data->ethnic_group);?>"><input type="hidden" name="eeo_class" value="<?php echo html_escape($data->eeo_class_gp);?>">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="ssn"><?php echo display('ssn')?></label>
@@ -1209,4 +1196,4 @@
     </div>
 
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/employeForm.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/employeForm.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/employeForm.js'); ?>"></script>

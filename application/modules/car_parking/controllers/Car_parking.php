@@ -291,13 +291,13 @@ class Car_parking extends MX_Controller {
 		$data["zone_list"] = $this->carparking_model->read('tbl_zone', 'zone_id');
 		$data["vehicle_list"] = $this->carparking_model->read('tbl_vehicle', 'vehicle_id');
 		if(empty($id)){
-			$data["setting_details"] = $this->carparking_model->read('tbl_parkingSetting', 'parkingSetting_id');
+			$data["setting_details"] = $this->carparking_model->read('tbl_parkingsetting', 'parkingSetting_id');
 			$data['module'] = "car_parking";
 			$data['page']   = "setting_list";   
 			echo Modules::run('template/layout', $data); 
 		}
 		else{
-			$data["intinfo"] = $this->carparking_model->findById($id, 'parkingSetting_id', 'tbl_parkingSetting');
+			$data["intinfo"] = $this->carparking_model->findById($id, 'parkingSetting_id', 'tbl_parkingsetting');
 			$data['module'] = "car_parking";
 			$this->load->view("edit_setting", $data);
 		}
@@ -322,7 +322,7 @@ class Car_parking extends MX_Controller {
 		   'vat' 	     => $this->input->post('vat',TRUE),
 		  );
 		$this->permission->method('car_parking','create')->redirect();
-		if ($this->carparking_model->create('tbl_parkingSetting', $postData)) { 
+		if ($this->carparking_model->create('tbl_parkingsetting', $postData)) { 
 		 $this->session->set_flashdata('message', display('save_successfully'));
 		 redirect('car_parking/settingList');
 		} else {
@@ -341,7 +341,7 @@ class Car_parking extends MX_Controller {
 		   'vat' 	     		=> $this->input->post('vat',TRUE),
 		  );
 	 
-		if ($this->carparking_model->update($postData, 'parkingSetting_id', 'tbl_parkingSetting')) { 
+		if ($this->carparking_model->update($postData, 'parkingSetting_id', 'tbl_parkingsetting')) { 
 		 $this->session->set_flashdata('message', display('update_successfully'));
 		} else {
 		$this->session->set_flashdata('exception',  display('please_try_again'));
@@ -364,7 +364,7 @@ class Car_parking extends MX_Controller {
     {
         $this->permission->module('car_parking','delete')->redirect();
 		
-		if ($this->carparking_model->delete($id, 'parkingSetting_id', 'tbl_parkingSetting')) {
+		if ($this->carparking_model->delete($id, 'parkingSetting_id', 'tbl_parkingsetting')) {
 			#set success message
 			$this->session->set_flashdata('message',display('delete_successfully'));
 		} else {
@@ -387,7 +387,7 @@ class Car_parking extends MX_Controller {
     {
 		$this->permission->method('car_parking','read')->redirect();
         $data['title']    = display('carparking'); 
-        $data["bookParking_details"] = $this->carparking_model->read('tbl_bookParking', 'bookParking_id');
+        $data["bookParking_details"] = $this->carparking_model->read('tbl_bookparking', 'bookParking_id');
         $data['module'] = "car_parking";
         $data['page']   = "book_parking";   
         echo Modules::run('template/layout', $data); 
@@ -395,13 +395,13 @@ class Car_parking extends MX_Controller {
 	public function getZone(){
 		$parkingSetting_id = $this->input->post("zone", true);
 		$vehicle_id = $this->input->post("vehicle_type", true);
-		$details = $this->db->select("tz.zone_id, tz.zone_type")->from("tbl_zone tz")->join("tbl_parkingSetting tps", "tps.zone_id=tz.zone_id", "left")->where("tps.vehicle_id", $vehicle_id)->group_by("tps.zone_id")->get()->result();
+		$details = $this->db->select("tz.zone_id, tz.zone_type")->from("tbl_zone tz")->join("tbl_parkingsetting tps", "tps.zone_id=tz.zone_id", "left")->where("tps.vehicle_id", $vehicle_id)->group_by("tps.zone_id")->get()->result();
 		echo json_encode($details);
 	}
 	public function getTime(){
 		$vehicle_id = $this->input->post("vehicle_id", true);
 		$zone_id = $this->input->post("zone", true);
-		$details = $this->db->select("parkingSetting_id,time")->from("tbl_parkingSetting")->where("vehicle_id", $vehicle_id)->where("zone_id", $zone_id)->get()->result();
+		$details = $this->db->select("parkingSetting_id,time")->from("tbl_parkingsetting")->where("vehicle_id", $vehicle_id)->where("zone_id", $zone_id)->get()->result();
 		echo json_encode($details);
 	}
 	public function getSlot(){
@@ -410,12 +410,12 @@ class Car_parking extends MX_Controller {
 		$checkin = $this->input->post("checkinTime", true);
 		$checkout = $this->input->post("checkoutTime", true);
 		$status="status=1";
-		$exits = $this->db->select("*")->from('tbl_bookParking')->where('checkin<=',$checkin)->where('checkout>',$checkin)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
-		$exit = $this->db->select("*")->from('tbl_bookParking')->where('checkin<',$checkout)->where('checkout>=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
-		$check = $this->db->select("*")->from('tbl_bookParking')->where('checkin>',$checkin)->where('checkout<=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
-		$totalslot1 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookParking')->where('checkin<=',$checkin)->where('checkout>',$checkin)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->row();
-		$totalslot2 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookParking')->where('checkin<',$checkout)->where('checkout>=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->row();
-		$totalslot3 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookParking')->where('checkin>=',$checkin)->where('checkout<=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->group_by('checkin')->get()->result();
+		$exits = $this->db->select("*")->from('tbl_bookparking')->where('checkin<=',$checkin)->where('checkout>',$checkin)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
+		$exit = $this->db->select("*")->from('tbl_bookparking')->where('checkin<',$checkout)->where('checkout>=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
+		$check = $this->db->select("*")->from('tbl_bookparking')->where('checkin>',$checkin)->where('checkout<=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->result();
+		$totalslot1 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookparking')->where('checkin<=',$checkin)->where('checkout>',$checkin)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->row();
+		$totalslot2 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookparking')->where('checkin<',$checkout)->where('checkout>=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->get()->row();
+		$totalslot3 = $this->db->select("count(bookParking_id) as allslot")->from('tbl_bookparking')->where('checkin>=',$checkin)->where('checkout<=',$checkout)->where($status)->where("zone_id",$zone_id)->where("bookParking_id!=",$parkingId)->group_by('checkin')->get()->result();
 		$allbookedslot3 = (!empty($allbookedslot3)?max(array_column($totalslot3, 'allslot')):0);
 		$totalslotfound=$this->db->select("count(slot_id) as totalslot")->from('tbl_slot')->where('zone_id',$zone_id)->get()->row();
 		$numberlist=$this->db->select("*")->from('tbl_slot')->where('zone_id',$zone_id)->get()->result();
@@ -482,7 +482,7 @@ class Car_parking extends MX_Controller {
 	}
 	public function getBill(){
 		$parkingSetting_id = $this->input->post("parkingSetting_id", true);
-		$details = $this->db->select("price,vat")->from("tbl_parkingSetting")->where("parkingSetting_id", $parkingSetting_id)->get()->row();
+		$details = $this->db->select("price,vat")->from("tbl_parkingsetting")->where("parkingSetting_id", $parkingSetting_id)->get()->row();
 		echo json_encode($details);
 	}
 	public function Differences ($Arg1, $Arg2){
@@ -524,9 +524,9 @@ class Car_parking extends MX_Controller {
 			'comment' =>$comment,
 		);
 		if(empty($parkingId)){
-			$insert = $this->db->insert("tbl_bookParking", $data);
+			$insert = $this->db->insert("tbl_bookparking", $data);
 		}else{
-			$insert = $this->db->where("bookParking_id", $parkingId)->update("tbl_bookParking", $data);
+			$insert = $this->db->where("bookParking_id", $parkingId)->update("tbl_bookparking", $data);
 		}
 		if($insert){
 			$this->session->set_flashdata('message', display('save_successfully'));
@@ -539,13 +539,13 @@ class Car_parking extends MX_Controller {
     {
 		$this->permission->method('car_parking','read')->redirect();
         $data['title']    = display('parking'); 
-		$data["parking_details"] = $this->carparking_model->read('tbl_bookParking', 'bookParking_id');
+		$data["parking_details"] = $this->carparking_model->read('tbl_bookparking', 'bookParking_id');
 		$data['module'] = "car_parking";
 		if(empty($id)){
 			$data['page']   = "parking_list";   
 			echo Modules::run('template/layout', $data); 
 		}else{
-			$data["intinfo"] = $this->carparking_model->findById($id, 'bookParking_id', 'tbl_bookParking');
+			$data["intinfo"] = $this->carparking_model->findById($id, 'bookParking_id', 'tbl_bookparking');
 			$data["vehicle"] = $this->carparking_model->findById($data["intinfo"]->parkingSetting_id, 'parkingSetting_id', 'tbl_parkingsetting');
 			$data["zone"] = $this->carparking_model->findById($data["intinfo"]->zone_id, 'zone_id', 'tbl_zone');
 			$data["booking_details"] = $this->carparking_model->readWhere('booking_number,bookedid,room_no', 'booked_info', 'bookedid', array('bookingstatus' => array(0,4)));
@@ -562,7 +562,7 @@ class Car_parking extends MX_Controller {
 			'status'=>2
 		);
 
-		if ($this->carparking_model->update($postData, 'bookParking_id', 'tbl_bookParking')) {
+		if ($this->carparking_model->update($postData, 'bookParking_id', 'tbl_bookparking')) {
 			#set success message
 			$this->session->set_flashdata('message',"Cancelled Successfully");
 		} else {

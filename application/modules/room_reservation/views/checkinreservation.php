@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/custom.css'); ?>">
 <div id="reservation">
     <div class="card mb-4">
         <div class="card-header py-2 ">
@@ -1162,6 +1162,6 @@
     ?>
 <input type="hidden" id="tax_percent" value="<?php echo $taxPercent; ?>">
 <input type="hidden" id="service_percent" value="<?php echo $setting->servicecharge; ?>">
-<script src="<?php echo MOD_URL.$module;?>/assets/js/checkinreservation.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/customedit.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/bookingedit.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/checkinreservation.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/checkinreservation.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/customedit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/customedit.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/bookingedit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/bookingedit.js'); ?>"></script>

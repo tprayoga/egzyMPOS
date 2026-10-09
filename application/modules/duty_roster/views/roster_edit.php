@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/customroster.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/customroster.css'); ?>">
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="panel">
@@ -75,4 +75,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/roster_edit.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/roster_edit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/roster_edit.js'); ?>"></script>

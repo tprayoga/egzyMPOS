@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css">
+<link rel="stylesheet" href="<?php echo MOD_URL.$module;?>/assets/css/custom.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/custom.css'); ?>">
 <style>
 .rentinfo-seatplan {
     width: 685px;
@@ -864,6 +864,6 @@
 <input type="hidden" value="<?php echo html_escape($setting->tax) ?>" id="tax">
 <input type="hidden" value="<?php echo html_escape($setting->servicecharge) ?>" id="scharge">
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/editreservation.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/customedit.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/bookingedit.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/editreservation.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/editreservation.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/customedit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/customedit.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/bookingedit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/bookingedit.js'); ?>"></script>

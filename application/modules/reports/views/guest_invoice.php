@@ -1,4 +1,4 @@
-<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css">
+<link type="text/css" href="<?php echo MOD_URL.$module;?>/assets/css/table.css?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/css/table.css'); ?>">
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="card">
     <div class="row">

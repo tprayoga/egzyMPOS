@@ -24,10 +24,19 @@ class Pbjt_provision
         'booked_info','booked_details','customer_order','sub_order','order_menu','bill',
         'multipay_bill','bill_card_payment','tbl_postedbills','tbl_hallroom_booking',
         'tbl_hallroom_postbill','tbl_guestpayments','tbl_kitchen_order','tbl_orderprepare',
-        'tbl_vehicle_booking','tbl_bookParking','tbl_laundry_payment','customerinfo',
+        'tbl_vehicle_booking','tbl_bookparking','tbl_laundry_payment','customerinfo',
     ];
 
-    public function __construct($db) { $this->db = $db; }
+    public function __construct($db)
+    {
+        $this->db = $db;
+        // Nama DB dari konfigurasi (env / pbjt_db.local.php), bukan hardcode: lingkungan lain (uji, UAT,
+        // produksi dengan nama berbeda) dulu tetap menulis ke pbjt_control/hotelv3 asli.
+        $dir = defined('APPPATH') ? APPPATH : dirname(__DIR__, 3) . '/';
+        $c = require $dir . 'config/pbjt_db.php';
+        $this->control = $c['control_db'];
+        $this->oversight = $this->source = $c['oversight_db'];
+    }
 
     private function tablesOf($schema, $excludePbjt = true)
     {

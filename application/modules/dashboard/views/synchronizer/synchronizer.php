@@ -51,6 +51,6 @@
 </div>
 <input type="hidden" id="csrfToken" value="<?php echo $this->security->get_csrf_token_name(); ?>:<?php echo $this->security->get_csrf_hash(); ?>">
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/sunchronizer.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/sunchronizer.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/sunchronizer.js'); ?>"></script>
 
 

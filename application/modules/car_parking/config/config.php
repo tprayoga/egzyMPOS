@@ -8,6 +8,6 @@ $HmvcConfig['car_parking']["_version"]   = 1.0;
 // only register tables are imported while installing the module
 $HmvcConfig['car_parking']['_database'] = true;
 $HmvcConfig['car_parking']["_tables"] = array( 
-	'tbl_zone','tbl_slot','tbl_vehicle','tbl_parkingSetting','tbl_bookParking'
+	'tbl_zone','tbl_slot','tbl_vehicle','tbl_parkingsetting','tbl_bookparking'
 );
 $HmvcConfig['car_parking']["_extra_query"] = true;

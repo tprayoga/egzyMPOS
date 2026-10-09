@@ -17,42 +17,37 @@
                     <thead>
                         <tr>
                             <th><?php echo display('ingredient_name') ?></th>
-                            <th><?php echo display("qty"); ?> </th>
-                            <th><?php echo display('price') ?> </th>
-                            <th><?php echo display('total') ?> </th>
-
+                            <th class="text-right">Dibeli</th>
+                            <th class="text-right">Diretur</th>
+                            <th class="text-right">Rusak</th>
+                            <th class="text-right">Terpakai</th>
+                            <th class="text-right">Stok saat ini</th>
+                            <th class="text-right">Nilai pembelian</th>
                         </tr>
                     </thead>
                     <tbody id="addinvoiceItem">
                         <?php
-                        $sl = 1;
                         $grandpr = 0;
+                        $fmt = function ($n) { return rtrim(rtrim(number_format((float) $n, 2, ',', '.'), '0'), ','); };
                         foreach ($stockreport as $report) {
-                            $grandpr = ($report->sumprice * $report->qty) + $grandpr;
+                            $grandpr += $report->nilai_beli;
+                            $u = ' ' . html_escape($report->uom_short_code);
                         ?>
-
-
                         <tr>
-                            <td><?php echo  html_escape($report->product_name); ?></td>
-                            <td><?php echo   html_escape($report->qty . " " . $report->uom_short_code); ?></td>
-                            <td> <?php echo  html_escape($report->sumprice); ?> </td>
-                            <td> <?php echo  html_escape($report->sumprice * $report->qty); ?> </td>
-
+                            <td><?php echo html_escape($report->product_name); ?></td>
+                            <td class="text-right"><?php echo $fmt($report->dibeli) . $u; ?></td>
+                            <td class="text-right"><?php echo $fmt($report->diretur) . $u; ?></td>
+                            <td class="text-right"><?php echo $fmt($report->rusak) . $u; ?></td>
+                            <td class="text-right"><?php echo $fmt($report->terpakai) . $u; ?></td>
+                            <td class="text-right"><strong><?php echo $fmt($report->stok) . $u; ?></strong></td>
+                            <td class="text-right"><?php echo 'Rp ' . number_format((float) $report->nilai_beli, 0, ',', '.'); ?></td>
                         </tr>
-                        <?php $sl++;
-                        }
-                        ?>
+                        <?php } ?>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="3" align="right"><b><?php echo display('grand_total') ?>:</b></td>
-                            <td><?php if ($currency->position == 1) {
-                                    echo html_escape($currency->curr_icon);
-                                } ?><?php echo number_format($grandpr, 2); ?><?php if ($currency->position == 2) {
-                                                                                                                                                        echo html_escape($currency->curr_icon);
-                                                                                                                                                    } ?>
-                            </td>
-
+                            <td colspan="6" align="right"><b><?php echo display('grand_total') ?>:</b></td>
+                            <td class="text-right"><b><?php echo 'Rp ' . number_format($grandpr, 0, ',', '.'); ?></b></td>
                         </tr>
                     </tfoot>
                 </table>

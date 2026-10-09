@@ -62,4 +62,4 @@ $status = array(
 <div class="form-group text-right">
     <button type="submit" id="lsbmit" class="btn btn-success w-md m-b-5"><?php echo display('ad') ?></button>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/checkroomstatus.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/checkroomstatus.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/checkroomstatus.js'); ?>"></script>

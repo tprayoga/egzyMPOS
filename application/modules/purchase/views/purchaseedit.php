@@ -182,5 +182,5 @@
         </div>
     </div>
 </div>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/purchaseEdit.js"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/addPurchase.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/purchaseEdit.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/purchaseEdit.js'); ?>"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/addPurchase.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/addPurchase.js'); ?>"></script>

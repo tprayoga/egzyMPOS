@@ -188,4 +188,4 @@
     </div>
 </div>
 
-<script src="<?php echo MOD_URL.$module;?>/assets/js/installmentForm.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/installmentForm.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/installmentForm.js'); ?>"></script>

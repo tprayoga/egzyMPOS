@@ -3,4 +3,4 @@
 <input type="hidden" id="monthlysaleorder" value="<?php echo html_escape($monthlysaleorder);?>">
 <input type="hidden" id="month_name" value='<?php echo html_escape($monthname);?>'>
 <script src="<?php echo base_url('assets/js/Chart.min.js') ?>" type="text/javascript"></script>
-<script src="<?php echo MOD_URL.$module;?>/assets/js/chart2.js"></script>
+<script src="<?php echo MOD_URL.$module;?>/assets/js/chart2.js?v=<?php echo @filemtime(APPPATH.'modules/'.$module.'/assets/js/chart2.js'); ?>"></script>
